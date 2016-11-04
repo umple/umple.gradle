@@ -1,5 +1,3 @@
-
-
 group 'cruise.umple'
 version '0.0.0'
 
@@ -18,4 +16,55 @@ dependencies {
     compile files('./umple-latest.jar')
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+// First, apply the publishing plugin
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.gradle.publish:plugin-publish-plugin:0.9.6"
+  }
+}
+
+apply plugin: "com.gradle.plugin-publish"
+// Apply other plugins here, e.g. java plugin for a plugin written in java or
+// the groovy plugin for a plugin written in groovy
+
+// If your plugin has any external java dependencies, Gradle will attempt to
+// downloaded them from JCenter for anyone using the plugins DSL
+// so you should probably use JCenter for dependency resolution in your own
+// project.
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile gradleApi()
+  compile localGroovy() //not needed for Java plugins
+  compile files('./umple-latest.jar')
+}
+
+// Unless overridden in the pluginBundle config DSL, the project version will
+// be used as your plugin version when publishing
+group 'cruise.umple'
+version '0.0.0'
+
+// The configuration example below shows the minimum required properties
+// configured to publish your plugin to the plugin portal
+pluginBundle {
+  website = 'http://cruise.eecs.uottawa.ca/umple/'
+  vcsUrl = 'https://github.com/umple/umple'
+  description = 'Compile Umple files in Gradle'
+  tags = ['umple']
+
+  plugins {
+    greetingsPlugin {
+      id = 'com.cruise.umple.UmpleGradlePlugin'
+      displayName = 'Umple Plugin'
+    }
+  }
 }

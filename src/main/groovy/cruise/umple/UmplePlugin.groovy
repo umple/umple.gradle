@@ -5,7 +5,7 @@ import cruise.umple.UmpleConsoleConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class UmplePlugin implements Plugin<Project> {
+class UmpleGradlePlugin implements Plugin<Project> {
 
     private UmpleConsoleConfig cfg
 
