@@ -18,7 +18,7 @@ class UmpleGradlePlugin implements Plugin<Project> {
 			if(project.hasProperty("umpleArgs"))
 			{
 				// arguments are specified through gradle by -P, separated by commas (-P is for project properties)
-				// eg: "gradle compileUmpleFile 'P-umpleArgs=test.ump,-g,Java'"
+				// eg: "gradle compileUmpleFile '-PumpleArgs=test.ump,-g,Java'"
 				args(umpleArgs.split(','))
 				
 				UmpleConsoleMain(args)
