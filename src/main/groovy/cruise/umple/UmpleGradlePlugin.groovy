@@ -19,7 +19,9 @@ class UmpleGradlePlugin implements Plugin<Project> {
 			{
 				// arguments are specified through gradle by -P, separated by commas (-P is for project properties)
 				// eg: "gradle compileUmpleFile -PumpleArgs=test.ump,-g,Java"	
-				def cfg = new UmpleConsoleConfig("test.ump -g Java") // umpleArgs.split(','))
+				def cfg = new UmpleConsoleConfig("test.ump") // umpleArgs.split(','))
+				cfg.setGenerate("Java")
+				cfg.setPath("../../libs/")
 				def console = new UmpleConsoleMain(cfg)
 				console.runConsole()
 			}
