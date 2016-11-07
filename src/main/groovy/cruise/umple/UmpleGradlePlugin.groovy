@@ -9,6 +9,9 @@ import org.gradle.api.GradleException
 
 class UmpleGradlePlugin implements Plugin<Project> {
 
+	private UmpleConsoleConfig consoleConfig 
+	private UmpleConsoleMain consoleMain
+
     @Override
     void apply(final Project project) {
 
@@ -19,11 +22,16 @@ class UmpleGradlePlugin implements Plugin<Project> {
 			{
 				// arguments are specified through gradle by -P, separated by commas (-P is for project properties)
 				// eg: "gradle compileUmpleFile -PumpleArgs=test.ump,-g,Java"	
-				def cfg = new UmpleConsoleConfig("test.ump") // umpleArgs.split(','))
-				cfg.setGenerate("Java")
-				cfg.setPath("../../libs/")
-				def console = new UmpleConsoleMain(cfg)
-				console.runConsole()
+				
+				// #TODO_AH figure out how to parse: umpleArgs.split(','))
+				
+				consoleConfig = new UmpleConsoleConfig("test.ump") 
+				consoleConfig.setGenerate("Java")
+				consoleConfig.setPath("../../libs/")
+				
+				consoleMain = new UmpleConsoleMain(consoleConfig)
+				
+				consoleMain.runConsole()
 			}
 			else
 			{
