@@ -16,27 +16,41 @@ class UmpleGradlePlugin implements Plugin<Project> {
     void apply(final Project project) {
 
         project.task('compileUmpleFile') << {
-			// UmpleConsoleMain(cfg)
+			// command line arguments are specified through gradle by -P (-P is for project properties)
+			// eg: "gradle compileUmpleFile -PumpleFileName=test.ump -PlanguageToGenerate=Java"	
 		
-			if(project.hasProperty('umpleArgs'))
-			{
-				// arguments are specified through gradle by -P, separated by commas (-P is for project properties)
-				// eg: "gradle compileUmpleFile -PumpleArgs=test.ump,-g,Java"	
-				
-				// #TODO_AH figure out how to parse: umpleArgs.split(','))
-				
-				consoleConfig = new UmpleConsoleConfig("test.ump") 
-				consoleConfig.setGenerate("Java")
-				consoleConfig.setPath("../../libs/")
-				
-				consoleMain = new UmpleConsoleMain(consoleConfig)
-				
-				consoleMain.runConsole()
+			if(project.hasProperty('umpleFileName'))
+			{				
+				consoleConfig = new UmpleConsoleConfig(project.getProperty('umpleFileName')) 
 			}
 			else
 			{
-				throw new GradleException("Error: Command line arguments are required to compile an Umple file")
+				throw new GradleException("Error: You must specify an Umple file")
 			}
+			
+			if(project.hasProperty('languageToGenerate'))
+			{				
+				consoleConfig.setGenerate(project.getProperty('languageToGenerate'))
+			}
+			else
+			{
+				throw new GradleException("Error: You must specify a language to generate code for")
+			}
+			
+			if(project.hasProperty('outputPath'))
+			{				
+				consoleConfig.setPath(project.getProperty('outputPath'))
+			}
+			else
+			{
+				def defaultOutputPath = "../../libs/"
+			
+				consoleConfig.setPath(defaultOutputPath)
+			}				
+				
+			consoleMain = new UmpleConsoleMain(consoleConfig)
+				
+			consoleMain.runConsole()
         }
     }
 }
