@@ -1,5 +1,9 @@
 apply plugin: 'groovy'
 
+// Unless overridden in the pluginBundle config DSL, the project version will
+// be used as your plugin version when publishing
+group 'cruise.umple'
+version '0.0.1'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -9,7 +13,7 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile files('../../libs/umple-latest.jar')
+    compile files('../../libs/umple.jar')
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
@@ -17,7 +21,7 @@ dependencies {
 apply plugin: 'maven'
 
 group 'cruise.umple'
-version '0.0.0'
+version '0.0.1'
 
 uploadArchives {
     repositories {
@@ -57,11 +61,6 @@ dependencies {
   compile files('./umple-latest.jar')
 }
 
-// Unless overridden in the pluginBundle config DSL, the project version will
-// be used as your plugin version when publishing
-group 'cruise.umple'
-version '0.0.0'
-
 // The configuration example below shows the minimum required properties
 // configured to publish your plugin to the plugin portal
 pluginBundle {
@@ -72,7 +71,7 @@ pluginBundle {
 
   plugins {
     greetingsPlugin {
-      id = 'com.cruise.umple.UmpleGradlePlugin'
+      id = 'umple.gradle.plugin'
       displayName = 'Umple Plugin'
     }
   }

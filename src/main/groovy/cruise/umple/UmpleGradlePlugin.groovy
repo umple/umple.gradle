@@ -15,6 +15,11 @@ class UmpleGradlePlugin implements Plugin<Project> {
     @Override
     void apply(final Project project) {
 
+		// project.task('compileUmpleFileToJava') <<
+		// {
+		//	project.setProperty("languageToGenerate", "Java")
+		//}
+	
         project.task('compileUmpleFile') << {
 			// command line arguments are specified through gradle by -P (-P is for project properties)
 			// eg: "gradle compileUmpleFile -PumpleFileName=test.ump -PlanguageToGenerate=Java"	
@@ -52,5 +57,7 @@ class UmpleGradlePlugin implements Plugin<Project> {
 				
 			consoleMain.runConsole()
         }
+		
+		// project.compileUmpleFile.mustRunAfter project.compileUmpleFileToJava
     }
 }
