@@ -9,24 +9,40 @@ import org.gradle.api.GradleException
 
 class UmpleGradlePlugin implements Plugin<Project> {
 
+	// Member variables
+	private String m_umpleFileName = ""
+	private String m_languageToGenerate = ""
+	private String m_outputPath = ""
+	
 	private UmpleConsoleConfig consoleConfig 
 	private UmpleConsoleMain consoleMain
 
     @Override
     void apply(final Project project) {
 
-		// project.task('compileUmpleFileToJava') <<
-		// {
-		//	project.setProperty("languageToGenerate", "Java")
-		//}
+		project.task('compileUmpleFileToJava') <<
+		{
+			m_languageToGenerate = "Java"
+		}
+		
+		project.task('compileUmpleFileToCpp') <<
+		{
+			m_languageToGenerate = "Cpp"
+		}
+		
+		project.task('compileUmpleFileToSQL') <<
+		{
+			m_languageToGenerate = "SQL"
+		}
 	
         project.task('compileUmpleFile') << {
 			// command line arguments are specified through gradle by -P (-P is for project properties)
 			// eg: "gradle compileUmpleFile -PumpleFileName=test.ump -PlanguageToGenerate=Java"	
 		
 			if(project.hasProperty('umpleFileName'))
-			{				
-				consoleConfig = new UmpleConsoleConfig(project.getProperty('umpleFileName')) 
+			{		
+				m_umpleFileName = project.getProperty('umpleFileName')
+				consoleConfig = new UmpleConsoleConfig(m_umpleFileName) 
 			}
 			else
 			{
@@ -35,11 +51,19 @@ class UmpleGradlePlugin implements Plugin<Project> {
 			
 			if(project.hasProperty('languageToGenerate'))
 			{				
-				consoleConfig.setGenerate(project.getProperty('languageToGenerate'))
+				m_languageToGenerate = project.getProperty('languageToGenerate')
+				consoleConfig.setGenerate(m_languageToGenerate)
 			}
 			else
 			{
-				throw new GradleException("Error: You must specify a language to generate code for")
+				if(m_languageToGenerate != "")
+				{
+					consoleConfig.setGenerate(m_languageToGenerate)
+				}
+				else
+				{
+					throw new GradleException("Error: You must specify a language to generate code for")
+				}
 			}
 			
 			if(project.hasProperty('outputPath'))
@@ -58,6 +82,9 @@ class UmpleGradlePlugin implements Plugin<Project> {
 			consoleMain.runConsole()
         }
 		
-		// project.compileUmpleFile.mustRunAfter project.compileUmpleFileToJava
+		// #TODO_AH figure out why this doesn't work
+		project.compileUmpleFile.mustRunAfter project.compileUmpleFileToJava
+		project.compileUmpleFile.mustRunAfter project.compileUmpleFileToCpp
+		project.compileUmpleFile.mustRunAfter project.compileUmpleFileToSQL
     }
 }

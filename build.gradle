@@ -3,7 +3,7 @@ apply plugin: 'groovy'
 // Unless overridden in the pluginBundle config DSL, the project version will
 // be used as your plugin version when publishing
 group 'cruise.umple'
-version '0.0.1'
+version '0.0.3'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -19,9 +19,6 @@ dependencies {
 }
 
 apply plugin: 'maven'
-
-group 'cruise.umple'
-version '0.0.1'
 
 uploadArchives {
     repositories {
