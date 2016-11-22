@@ -20,22 +20,6 @@ class UmpleGradlePlugin implements Plugin<Project> {
 
     @Override
     void apply(final Project project) {
-
-		// eg: "gradle compileUmpleFileToJava -PumpleFileName=test.ump // work in progress
-		project.task('compileUmpleFileToJava') <<
-		{
-			m_languageToGenerate = "Java"
-		}
-		
-		project.task('compileUmpleFileToCpp') <<
-		{
-			m_languageToGenerate = "Cpp"
-		}
-		
-		project.task('compileUmpleFileToSQL') <<
-		{
-			m_languageToGenerate = "SQL"
-		}
 	
 		project.task('compileUmpleFile') << {
 			// command line arguments are specified through gradle by -P (-P is for project properties)
@@ -82,9 +66,5 @@ class UmpleGradlePlugin implements Plugin<Project> {
 			m_consoleMain.runConsole()
 		}
 		
-		// #TODO_AH figure out why this doesn't work
-		project.compileUmpleFile.mustRunAfter project.compileUmpleFileToJava
-		project.compileUmpleFile.mustRunAfter project.compileUmpleFileToCpp
-		project.compileUmpleFile.mustRunAfter project.compileUmpleFileToSQL
     }
 }
