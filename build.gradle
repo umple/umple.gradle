@@ -18,7 +18,30 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
+// First, apply the publishing plugin
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+	jcenter()
+  }
+  dependencies {
+    classpath "com.gradle.publish:plugin-publish-plugin:0.9.6"
+	classpath 'de.undercouch:gradle-download-task:3.1.2'
+  }
+}
+
+apply plugin: 'de.undercouch.download'
+apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'maven'
+
+download {
+	onlyIfNewer = true
+	overwrite = true
+    src 'http://cruise.eecs.uottawa.ca/umpleonline/scripts/umple.jar'
+    dest '../../libs/'
+}
 
 uploadArchives {
     repositories {
@@ -28,19 +51,6 @@ uploadArchives {
     }
 }
 
-// First, apply the publishing plugin
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-  dependencies {
-    classpath "com.gradle.publish:plugin-publish-plugin:0.9.6"
-  }
-}
-
-apply plugin: "com.gradle.plugin-publish"
 // Apply other plugins here, e.g. java plugin for a plugin written in java or
 // the groovy plugin for a plugin written in groovy
 
