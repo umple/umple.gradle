@@ -3,7 +3,7 @@ apply plugin: 'groovy'
 // Unless overridden in the pluginBundle config DSL, the project version will
 // be used as your plugin version when publishing
 group 'cruise.umple'
-version '0.0.3'
+version '0.1.0'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -73,7 +73,7 @@ dependencies {
 pluginBundle {
   website = 'http://cruise.eecs.uottawa.ca/umple/'
   vcsUrl = 'https://github.com/umple/umple'
-  description = 'Compile Umple files in Gradle'
+  description = 'Compile Umple files in Gradle. See the ReadMe at https://github.com/umple/umple.gradle for additional information.'
   tags = ['umple']
 
   plugins {
