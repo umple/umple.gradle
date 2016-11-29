@@ -5,11 +5,11 @@
 
 **Instructions:**
 To use, you must set the relevant project properties:
-  - umpleFileName
-  - languageToGenerate
-  - outputPath (optional)
+  - umpleFileName (Required)
+  - languageToGenerate (Required)
+  - outputPath (Optional)
 
-This can either be done in a build script, or through the command line. Below are some examples.
+These can be set either in a script, or through the command line. If any required fields are not set, an exception will be thrown.
   
 **Script:**
 ```
@@ -22,7 +22,9 @@ project.ext.set("languageToGenerate", "Java")
 gradle compileUmpleFile -PumpleFileName=test.ump -PlanguageToGenerate=Java
 ```
 
-The Umple compiler jar must also be present and referenced as a buildscript dependency.
+The [Umple Compiler Jar](https://github.com/umple/Umple/releases/latest/) must also be present and referenced as a buildscript dependency.
+
+**Buildscript**
 ```
 buildscript {
     repositories {
