@@ -13,7 +13,7 @@ class UmpleGradlePlugin implements Plugin<Project> {
 	private String m_umpleFileName = ""
 	private String m_languageToGenerate = ""
 	private String m_outputPath = ""
-	private String m_defaultOutputPath = "../../libs/"
+	private String m_defaultOutputPath = "/umpleOutput/"
 	
 	private UmpleConsoleConfig m_consoleConfig 
 	private UmpleConsoleMain m_consoleMain
