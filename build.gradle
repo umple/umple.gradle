@@ -13,7 +13,7 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile files('../../libs/umple.jar')
+    compile files('libs/umple-latest.jar')
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
@@ -40,13 +40,13 @@ download {
 	onlyIfNewer = true
 	overwrite = true
     src 'http://cruise.eecs.uottawa.ca/umpleonline/scripts/umple.jar'
-    dest '../../libs/'
+    dest '/libs/umple-latest.jar'
 }
 
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: uri('../libs/'))
+            repository(url: uri('libs/'))
         }
     }
 }
