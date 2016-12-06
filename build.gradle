@@ -40,7 +40,7 @@ download {
 	onlyIfNewer = true
 	overwrite = true
     src 'http://cruise.eecs.uottawa.ca/umpleonline/scripts/umple.jar'
-    dest '/libs/umple-latest.jar'
+    dest 'libs/umple-latest.jar'
 }
 
 uploadArchives {
