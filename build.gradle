@@ -3,7 +3,7 @@ apply plugin: 'groovy'
 // Unless overridden in the pluginBundle config DSL, the project version will
 // be used as your plugin version when publishing
 group 'cruise.umple'
-version '0.1.0'
+version '0.1.1'
 sourceCompatibility = '1.8'
 
 repositories {
