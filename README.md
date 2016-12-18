@@ -29,11 +29,11 @@ The [Umple Compiler Jar](https://github.com/umple/Umple/releases/latest/) must a
 buildscript {
     repositories {
         maven {
-            url uri('../../libs')
+            url uri('libs')
         }
     }
     dependencies {
-		classpath files('../../libs/umple.jar')
+		classpath files('libs/umple-latest.jar')
 		classpath group: 'cruise.umple', name: 'UmpleGradlePlugin',  version: '0.1.0'
 		classpath 'de.undercouch:gradle-download-task:3.1.2'
     }
@@ -53,7 +53,7 @@ download {
 	onlyIfNewer = true
 	overwrite = true
     src 'http://cruise.eecs.uottawa.ca/umpleonline/scripts/umple.jar'
-    dest '../../libs/'
+    dest 'libs/umple-latest.jar'
 }
 ```
 
