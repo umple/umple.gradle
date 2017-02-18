@@ -29,7 +29,10 @@ The [Umple Compiler Jar](https://github.com/umple/Umple/releases/latest/) must a
 buildscript {
     repositories {
         maven {
-            url uri('libs')
+      	  url "https://plugins.gradle.org/m2/"
+    	}
+        maven {
+          url uri('libs')
         }
     }
     dependencies {
