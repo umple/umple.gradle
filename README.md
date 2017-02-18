@@ -22,7 +22,7 @@ project.ext.set("languageToGenerate", "Java")
 gradle compileUmpleFile -PumpleFileName=test.ump -PlanguageToGenerate=Java
 ```
 
-The [Umple Compiler Jar](https://github.com/umple/Umple/releases/latest/) must also be present and referenced as a buildscript dependency.
+The [Umple Compiler Jar](https://github.com/umple/Umple/releases/latest/) must also be present on your local machine and referenced as a buildscript dependency in the `build.gradle` file of the project that is applying the gradle plugin.
 
 **Buildscript**
 ```
