@@ -20,9 +20,7 @@ class UmpleGradlePlugin implements Plugin<Project> {
 	private UmpleConsoleMain m_consoleMain
 
 	@Override
-	void apply(final Project project) { 	
-		project.plugins.apply 'java'
-		
+	void apply(final Project project) { 
 		// Set default property values
 		m_languageToGenerate = 'Java'
 		m_generatedOutputPath = "${project.buildDir}${File.separator}generated${File.separator}src${File.separator}java"
