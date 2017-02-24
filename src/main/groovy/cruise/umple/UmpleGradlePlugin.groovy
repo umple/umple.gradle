@@ -11,7 +11,7 @@ class UmpleGradlePlugin implements Plugin<Project> {
 	private final String UMPLE_FILE_PATH = 'umpleFileName'
 	private final String LANGUAGE_TO_GENERATE = 'languageToGenerate'
 	private final String GENERATED_OUTPUT_PATH = 'outputPath'
-		
+
 	// Member variables
 	private String m_languageToGenerate = ''
 	private String m_generatedOutputPath = ''
@@ -27,7 +27,7 @@ class UmpleGradlePlugin implements Plugin<Project> {
 		m_languageToGenerate = 'Java'
 		m_generatedOutputPath = "${project.buildDir}${File.separator}generated${File.separator}src${File.separator}java"
 		m_umpleFilePath = "${project.projectDir}${File.separator}src${File.separator}master.ump"
-    	
+		
 		project.task('generateSource') << {		
 			// command line arguments can be specified through gradle by -P (-P is for project properties)
 			// eg: "gradle compileUmpleFile -PUMPLE_FILE_PATH=test.ump -PLANGUAGE_TO_GENERATE=Java"	
@@ -56,11 +56,11 @@ class UmpleGradlePlugin implements Plugin<Project> {
 			
 			addGeneratedToSource(project)
 		}	 
-  }
-    
+	}
+
 	void addGeneratedToSource(Project project) {
-   project.sourceSets.matching { it.name == "generatedSource" } .all {
-    it.java.srcDir "${project.buildDir}${File.separator}generated${File.separator}src${File.separator}java"
-   }
- 	}    	
+		project.sourceSets.matching { it.name == "generatedSource" } .all {
+			it.java.srcDir "${project.buildDir}${File.separator}generated${File.separator}src${File.separator}java"
+		}
+ 	}		
 }
