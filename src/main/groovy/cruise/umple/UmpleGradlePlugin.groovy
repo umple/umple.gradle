@@ -5,66 +5,65 @@ import cruise.umple.UmpleConsoleMain
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.GradleException
 
 class UmpleGradlePlugin implements Plugin<Project> {
+	// Project properties
+	private static final String UMPLE_FILE_PATH = 'umpleFilePath'
+	private static final String LANGUAGE_TO_GENERATE = 'languageToGenerate'
+	private static final String GENERATED_OUTPUT_PATH = 'outputPath'
+	
+	// Default project properties
+	private static final String DEFAULT_LANGUAGE_TO_GENERATE = 'Java'
+	private static final String DEFAULT_GENERATED_OUTPUT_PATH = "generated${File.separator}src${File.separator}java"
+	private static final String DEFAULT_UMPLE_FILE_PATH = "src${File.separator}master.ump"
 
 	// Member variables
-	private String m_umpleFileName = ""
-	private String m_languageToGenerate = ""
-	private String m_outputPath = ""
-	private String m_defaultOutputPath = "umpleOutput/"
-	
+	private String m_languageToGenerate 
+	private String m_generatedOutputPath
+	private m_umpleFilePath
 	private UmpleConsoleConfig m_consoleConfig 
 	private UmpleConsoleMain m_consoleMain
 
-    @Override
-    void apply(final Project project) {
-	
-		project.task('compileUmpleFile') << {
-			// command line arguments are specified through gradle by -P (-P is for project properties)
-			// eg: "gradle compileUmpleFile -PumpleFileName=test.ump -PlanguageToGenerate=Java"	
+	@Override
+	void apply(final Project project) { 
+		project.task('generateSource') << {		
+			// command line arguments can be specified through gradle by -P (-P is for project properties)
+			// eg: "gradle compileUmpleFile -PUMPLE_FILE_PATH=test.ump -PLANGUAGE_TO_GENERATE=Java"	
 		
-			if(project.hasProperty('umpleFileName'))
-			{		
-				m_umpleFileName = project.getProperty('umpleFileName')
-				m_consoleConfig = new UmpleConsoleConfig(m_umpleFileName) 
-			}
-			else
+			if(project.hasProperty(UMPLE_FILE_PATH))
 			{
-				throw new GradleException("Error: You must specify an Umple file")
+				m_umpleFilePath = project.getProperty(UMPLE_FILE_PATH)	
+			} else {
+				m_umpleFilePath = DEFAULT_UMPLE_FILE_PATH
 			}
+			m_consoleConfig = new UmpleConsoleConfig(m_umpleFilePath) 
 			
-			if(project.hasProperty('languageToGenerate'))
-			{				
-				m_languageToGenerate = project.getProperty('languageToGenerate')
-				m_consoleConfig.setGenerate(m_languageToGenerate)
-			}
-			else
+			if(project.hasProperty(LANGUAGE_TO_GENERATE))
 			{
-				if(m_languageToGenerate != "")
-				{
-					m_consoleConfig.setGenerate(m_languageToGenerate)
-				}
-				else
-				{
-					throw new GradleException("Error: You must specify a language to generate code for")
-				}
+				m_languageToGenerate = project.getProperty(LANGUAGE_TO_GENERATE)				
+			} else {
+				m_languageToGenerate = DEFAULT_LANGUAGE_TO_GENERATE
 			}
+			m_consoleConfig.setGenerate(m_languageToGenerate)
 			
-			if(project.hasProperty('outputPath'))
-			{				
-				m_consoleConfig.setPath(project.getProperty('outputPath'))
+			if(project.hasProperty(GENERATED_OUTPUT_PATH))
+			{
+				m_generatedOutputPath = project.getProperty(GENERATED_OUTPUT_PATH)
+			} else {
+				m_generatedOutputPath = DEFAULT_GENERATED_OUTPUT_PATH;
 			}
-			else
-			{		
-				m_consoleConfig.setPath(m_defaultOutputPath)
-			}				
-				
+			m_consoleConfig.setPath(m_generatedOutputPath)	
+			
 			m_consoleMain = new UmpleConsoleMain(m_consoleConfig)
-				
 			m_consoleMain.runConsole()
+			
+			addGeneratedToSource(project)
+		}	 
+	}
+
+	void addGeneratedToSource(Project project) {
+		project.sourceSets.matching { it.name == "generatedSource" } .all {
+			it.java.srcDir "${project.buildDir}${File.separator}generated${File.separator}src${File.separator}java"
 		}
-		
-    }
+ 	}		
 }
