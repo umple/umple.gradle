@@ -31,26 +31,26 @@ class UmpleGradlePlugin implements Plugin<Project> {
 			// eg: "gradle compileUmpleFile -PUMPLE_FILE_PATH=test.ump -PLANGUAGE_TO_GENERATE=Java"	
 		
 			if(project.hasProperty(UMPLE_FILE_PATH))
-			{		
+			{
 				m_umpleFilePath = project.getProperty(UMPLE_FILE_PATH)	
 			} else {
-			    m_umpleFilePath = DEFAULT_UMPLE_FILE_PATH
+				m_umpleFilePath = DEFAULT_UMPLE_FILE_PATH
 			}
 			m_consoleConfig = new UmpleConsoleConfig(m_umpleFilePath) 
 			
 			if(project.hasProperty(LANGUAGE_TO_GENERATE))
-			{				
+			{
 				m_languageToGenerate = project.getProperty(LANGUAGE_TO_GENERATE)				
 			} else {
-			    m_languageToGenerate = DEFAULT_LANGUAGE_TO_GENERATE
+				m_languageToGenerate = DEFAULT_LANGUAGE_TO_GENERATE
 			}
 			m_consoleConfig.setGenerate(m_languageToGenerate)
 			
 			if(project.hasProperty(GENERATED_OUTPUT_PATH))
-			{			
+			{
 				m_generatedOutputPath = project.getProperty(GENERATED_OUTPUT_PATH)
 			} else {
-			    m_generatedOutputPath = DEFAULT_GENERATED_OUTPUT_PATH;
+				m_generatedOutputPath = DEFAULT_GENERATED_OUTPUT_PATH;
 			}
 			m_consoleConfig.setPath(m_generatedOutputPath)	
 			
