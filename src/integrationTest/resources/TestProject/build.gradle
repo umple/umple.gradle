@@ -1,0 +1,34 @@
+buildscript {
+  repositories {
+    maven {
+      url uri('libs')
+    }
+    //flatDir dirs: "C:/Users/i_am_/workspace/umple.gradle/build/libs"
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    // Use the umple jar from the main umple.gradle project
+    classpath files('../../../../libs/umple-latest.jar')
+    classpath "gradle.plugin.cruise.umple:UmpleGradlePlugin:0.1.2"
+    //classpath "umple.gradle.plugin:UmpleGradlePlugin-0.1.2"
+  }
+}
+
+// Apply the java plugin to add support for Java
+apply plugin: 'java'
+ 
+ // Add required plugins and source sets to the sub projects
+subprojects{
+	apply plugin: "umple.gradle.plugin"
+	apply plugin: "java"
+  
+  sourceSets {
+    generatedSource
+  }
+
+  compileGeneratedSourceJava.dependsOn('generateSource')
+}
+
+compileJava.dependsOn(':subproj:compileGeneratedSourceJava', ':sub2:compileGeneratedSourceJava')

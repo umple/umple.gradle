@@ -12,10 +12,10 @@ class UmpleGradlePlugin implements Plugin<Project> {
 	private static final String LANGUAGE_TO_GENERATE = 'languageToGenerate'
 	private static final String GENERATED_OUTPUT_PATH = 'outputPath'
 	
-	// Default project properties
+	// Default project properties. Paths are relative to project's build.gradle file
 	private static final String DEFAULT_LANGUAGE_TO_GENERATE = 'Java'
-	private static final String DEFAULT_GENERATED_OUTPUT_PATH = "generated${File.separator}src${File.separator}java"
-	private static final String DEFAULT_UMPLE_FILE_PATH = "src${File.separator}master.ump"
+	private static final String DEFAULT_GENERATED_OUTPUT_PATH = "generated${File.separator}java"
+	private static final String DEFAULT_UMPLE_FILE_PATH = "src${File.separator}umple${File.separator}master.ump"
 
 	// Member variables
 	private String m_languageToGenerate 
@@ -29,12 +29,14 @@ class UmpleGradlePlugin implements Plugin<Project> {
 		project.task('generateSource') << {		
 			// command line arguments can be specified through gradle by -P (-P is for project properties)
 			// eg: "gradle compileUmpleFile -PUMPLE_FILE_PATH=test.ump -PLANGUAGE_TO_GENERATE=Java"	
+			m_umpleFilePath = "${project.projectDir}${File.separator}" 
+			m_generatedOutputPath = "${project.projectDir}${File.separator}"
 		
 			if(project.hasProperty(UMPLE_FILE_PATH))
 			{
-				m_umpleFilePath = project.getProperty(UMPLE_FILE_PATH)	
+				m_umpleFilePath += project.getProperty(UMPLE_FILE_PATH)	
 			} else {
-				m_umpleFilePath = DEFAULT_UMPLE_FILE_PATH
+				m_umpleFilePath += DEFAULT_UMPLE_FILE_PATH
 			}
 			m_consoleConfig = new UmpleConsoleConfig(m_umpleFilePath) 
 			
@@ -48,9 +50,9 @@ class UmpleGradlePlugin implements Plugin<Project> {
 			
 			if(project.hasProperty(GENERATED_OUTPUT_PATH))
 			{
-				m_generatedOutputPath = project.getProperty(GENERATED_OUTPUT_PATH)
+				m_generatedOutputPath += project.getProperty(GENERATED_OUTPUT_PATH)
 			} else {
-				m_generatedOutputPath = DEFAULT_GENERATED_OUTPUT_PATH;
+				m_generatedOutputPath += DEFAULT_GENERATED_OUTPUT_PATH;
 			}
 			m_consoleConfig.setPath(m_generatedOutputPath)	
 			
@@ -62,8 +64,8 @@ class UmpleGradlePlugin implements Plugin<Project> {
 	}
 
 	void addGeneratedToSource(Project project) {
-		project.sourceSets.matching { it.name == "generatedSource" } .all {
-			it.java.srcDir "${project.buildDir}${File.separator}generated${File.separator}src${File.separator}java"
+		project.sourceSets.matching { it.name == "generatedSource" }.all {
+			it.java.srcDir m_generatedOutputPath
 		}
  	}		
 }

@@ -1,0 +1,6 @@
+class StudentSub2
+{
+  Student2()
+  {
+  }
+}
