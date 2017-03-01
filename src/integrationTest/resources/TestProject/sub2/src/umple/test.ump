@@ -1,4 +1,4 @@
-class StudentSub2
+class Sub2
 {
   Student2()
   {

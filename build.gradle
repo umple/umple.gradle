@@ -1,3 +1,5 @@
+import org.gradle.api.GradleScriptException
+
 apply plugin: 'groovy'
 
 // Unless overridden in the pluginBundle config DSL, the project version will
@@ -64,6 +66,27 @@ project.integrationTest {
 check.dependsOn integrationTest 
  // Run unit tests before integration tests
 integrationTest.mustRunAfter test
+
+task copyUmpleJar(type: Copy) {
+    final String jarFolderPath = "${project.projectDir}/libs"
+    File jarFolder = new File(jarFolderPath)
+    int numberCheckedFiles = 0
+    final File[] jarFolderContents = jarFolder.listFiles() as File[]
+    for (numberCheckedFiles; numberCheckedFiles < jarFolderContents.length; numberCheckedFiles++) {
+        if (jarFolderContents[numberCheckedFiles].getName().equals("umple-latest.jar")) {
+           break;
+        }
+    }
+    if (numberCheckedFiles == jarFolderContents.length) {
+        throw new GradleScriptException("Unable to locate a umple-latest.jar in " + jarFolderPath, new RuntimeException())
+    }
+    
+    from jarFolderPath
+    into "${project.projectDir}/src/integrationTest/resources/TestProject/libs"
+}
+
+// Copy umple jar into a location TestProject can access it
+integrationTest.dependsOn copyUmpleJar
 
 // The unit tests and integration test reports must be written to different directories
 tasks.withType(Test) {

@@ -10,7 +10,7 @@ buildscript {
   }
   dependencies {
     // Use the umple jar from the main umple.gradle project
-    classpath files('../../../../libs/umple-latest.jar')
+    classpath files('libs/umple-latest.jar')
     classpath "gradle.plugin.cruise.umple:UmpleGradlePlugin:0.1.2"
     //classpath "umple.gradle.plugin:UmpleGradlePlugin-0.1.2"
   }
@@ -21,8 +21,8 @@ apply plugin: 'java'
  
  // Add required plugins and source sets to the sub projects
 subprojects{
-	apply plugin: "umple.gradle.plugin"
-	apply plugin: "java"
+  apply plugin: "umple.gradle.plugin"
+  apply plugin: "java"
   
   sourceSets {
     generatedSource
