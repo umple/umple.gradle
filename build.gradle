@@ -16,6 +16,7 @@ dependencies {
     compile files('libs/umple-latest.jar')
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'com.google.guava', name: 'guava', version: '19.0'
 }
 
 // First, apply the publishing plugin
@@ -65,6 +66,7 @@ check.dependsOn integrationTest
 // Run unit tests before integration tests
 integrationTest.mustRunAfter test
 
+// Copy the umple jar into a location that the TestProject used in the integration tests can access
 task copyUmpleJar(type: Copy) {
     final String jarFolderPath = "${project.projectDir}/libs"
     File jarFolder = new File(jarFolderPath)
@@ -86,7 +88,6 @@ task copyUmpleJar(type: Copy) {
     into "${project.projectDir}/src/integrationTest/resources/TestProject/libs"
 }
 
-// Copy umple jar into a location TestProject can access it
 integrationTest.dependsOn copyUmpleJar
 
 // The unit tests and integration test reports must be written to different directories
@@ -109,13 +110,10 @@ uploadArchives {
     }
 }
 
-// Apply other plugins here, e.g. java plugin for a plugin written in java or
-// the groovy plugin for a plugin written in groovy
-
-// If your plugin has any external java dependencies, Gradle will attempt to
-// downloaded them from JCenter for anyone using the plugins DSL
-// so you should probably use JCenter for dependency resolution in your own
-// project.
+/*
+  Apply other plugins here, e.g. java plugin for a plugin written in java or
+  the groovy plugin for a plugin written in groovy
+*/
 repositories {
     jcenter()
 }
@@ -126,8 +124,10 @@ dependencies {
     compile files('./umple-latest.jar')
 }
 
-// The configuration example below shows the minimum required properties
-// configured to publish your plugin to the plugin portal
+/*
+  The configuration below shows the minimum properties
+  required to publish the Umple plugin to the plugin portal
+*/
 pluginBundle {
     website = 'http://cruise.eecs.uottawa.ca/umple/'
     vcsUrl = 'https://github.com/umple/umple'
@@ -135,7 +135,7 @@ pluginBundle {
     tags = ['umple']
 
     plugins {
-        greetingsPlugin {
+        umplePlugin {
             id = 'umple.gradle.plugin'
             displayName = 'Umple Plugin'
         }

@@ -1,5 +1,4 @@
 import org.junit.*
-import static org.junit.Assert.assertTrue
 import static org.junit.Assert.fail
 import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.api.Project
@@ -8,19 +7,20 @@ import org.gradle.tooling.ProjectConnection
 import org.gradle.tooling.BuildLauncher
 import java.util.Map
 import java.util.HashMap
-import cruise.umple.util.SampleFileWriter;
+import static cruise.umple.util.SampleFileWriter.*
+import com.google.common.collect.ImmutableMultimap
 
 public class CompilationAndGeneration {    
     private static final DIRECTORIES_ROOT = "src/integrationTest/resources/TestProject/"
-    private static final Map<String, ArrayList<String>> DIRECTORIES_TO_CHECK
-    // Key = path to directory we want to check, value = the files we expect to find in the directory
+    private static final ImmutableMultimap<String, ArrayList<String>> DIRECTORIES_TO_CHECK
+    // Key = path to directory we want to check, value = the files we expect to find in the directory   
     static {
-        Map<String, ArrayList<String>> aMap = new HashMap<String, ArrayList<String>>()
-        aMap.put(DIRECTORIES_ROOT + "subproj/build/classes/generatedSource", ["Subproj.class", "Subproj2.class"])
-        aMap.put(DIRECTORIES_ROOT + "sub2/build/classes/generatedSource", ["Sub2.class", "Sub22.class"])
-        aMap.put(DIRECTORIES_ROOT + "subproj/generated/java", ["Subproj.java", "Subproj2.java"])
-        aMap.put(DIRECTORIES_ROOT + "sub2/generated/java", ["Sub2.java", "Sub22.java"])
-        DIRECTORIES_TO_CHECK = Collections.unmodifiableMap(aMap)
+        ImmutableMultimap.Builder<String, ArrayList<String>> builder = ImmutableMultimap.builder();
+        builder.put(DIRECTORIES_ROOT + "subproj/build/classes/generatedSource", ["Subproj.class", "Subproj2.class"])
+        builder.put(DIRECTORIES_ROOT + "sub2/build/classes/generatedSource", ["Sub2.class", "Sub22.class"])
+        builder.put(DIRECTORIES_ROOT + "subproj/generated/java", ["Subproj.java", "Subproj2.java"])
+        builder.put(DIRECTORIES_ROOT + "sub2/generated/java", ["Sub2.java", "Sub22.java"])
+        DIRECTORIES_TO_CHECK = builder.build();
     }
 
     private static final PATH_TO_TEST_PROJECT = "src/integrationTest/resources/TestProject"
@@ -43,7 +43,7 @@ public class CompilationAndGeneration {
         
     @Test
     public void verifyGeneratedAndCompiledFiles() { 
-        for (Map.Entry<String, ArrayList<String>> entry : DIRECTORIES_TO_CHECK.entrySet()) {
+        for (Map.Entry<String, ArrayList<String>> entry : DIRECTORIES_TO_CHECK.entries()) {
             int fileCount = 0
             File createdFolder = new File(entry.getKey())
             for (File file: createdFolder.listFiles()) {   
@@ -57,8 +57,8 @@ public class CompilationAndGeneration {
                 }
                
                 if (getFileExtension(fileName).equals("java")) {
-                      String actual = SampleFileWriter.readContent(file);
-                      SampleFileWriter.assertFileContent(new File(PATH_TO_TEST_PROJECT + "/verifiedGeneratedOutput", fileName), actual);
+                      String actual = readContent(file);
+                      assertFileContent(new File(PATH_TO_TEST_PROJECT + "/verifiedGeneratedOutput", fileName), actual);
                 }
                 fileCount++
             }
@@ -71,23 +71,11 @@ public class CompilationAndGeneration {
 
     @After
     public void tearDown() {
-        for (Map.Entry<String, ArrayList<String>> entry : DIRECTORIES_TO_CHECK.entrySet()) {
-            clean(entry.getKey())
+        for (Map.Entry<String, ArrayList<String>> entry : DIRECTORIES_TO_CHECK.entries()) {
+            destroy(entry.getKey())
         }
     }
-    
-    private void clean(final String DIR_PATH) {
-        try {
-            File dir = new File(DIR_PATH);
-            for (File file:dir.listFiles()) {
-                file.delete();
-            }
-            dir.delete();
-        } catch (Exception e) {
-            fail(e.getMessage)
-        }
-    }
-       
+           
     private boolean verifyFileName(String fileName, ArrayList<String> allowableValues) {
         for (String s : allowableValues) {
             if (s.equals(fileName)) {
