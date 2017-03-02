@@ -29,7 +29,7 @@ buildscript {
     }
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.6"
-        classpath 'de.undercouch:gradle-download-task:3.1.2'
+        classpath 'de.undercouch:gradle-download-task:3.2.0'
         classpath "gradle.plugin.org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.3.2"
     }
 }
@@ -44,6 +44,15 @@ apply plugin: "org.unbroken-dome.test-sets"
 apply plugin: 'de.undercouch.download'
 apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'maven'
+
+task downloadUmpleJar(type: de.undercouch.gradle.tasks.download.Download) {
+    onlyIfNewer true
+    overwrite true
+    src 'http://cruise.eecs.uottawa.ca/umpleonline/scripts/umple.jar'
+    dest 'libs/umple-latest.jar'
+}
+
+test.dependsOn('downloadUmpleJar')
 
 // Declare our integration test set
 testSets {
@@ -93,13 +102,6 @@ integrationTest.dependsOn copyUmpleJar
 // The unit tests and integration test reports must be written to different directories
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
-}
-
-download {
-    onlyIfNewer = true
-    overwrite = true
-    src 'http://cruise.eecs.uottawa.ca/umpleonline/scripts/umple.jar'
-    dest 'libs/umple-latest.jar'
 }
 
 uploadArchives {
