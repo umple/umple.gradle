@@ -19,7 +19,7 @@ buildscript {
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
  
- // Add required plugins and source sets to the sub projects
+// Add required plugins and source sets to the sub projects
 subprojects{
   apply plugin: "umple.gradle.plugin"
   apply plugin: "java"

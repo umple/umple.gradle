@@ -29,50 +29,50 @@ public class CompilationAndGeneration {
     @Before
     // Generates Java from master.ump and compiles the result
     public void setUp() {
-	    GradleConnector connector = GradleConnector.newConnector()
-	    connector.forProjectDirectory(new File(PATH_TO_TEST_PROJECT))
-	    ProjectConnection connection = connector.connect()
-	    try {
-	        BuildLauncher launcher = connection.newBuild()
-	        launcher.forTasks(TEST_PROJECT_TASK)
-	        launcher.run()
-	    } finally {
-	        connection.close()
-	    }
+        GradleConnector connector = GradleConnector.newConnector()
+        connector.forProjectDirectory(new File(PATH_TO_TEST_PROJECT))
+        ProjectConnection connection = connector.connect()
+        try {
+            BuildLauncher launcher = connection.newBuild()
+            launcher.forTasks(TEST_PROJECT_TASK)
+            launcher.run()
+        } finally {
+            connection.close()
+        }
     }
         
     @Test
     public void verifyGeneratedAndCompiledFiles() { 
-		for (Map.Entry<String, ArrayList<String>> entry : DIRECTORIES_TO_CHECK.entrySet()) {
-		    int fileCount = 0
-		    File createdFolder = new File(entry.getKey())
-		    for (File file: createdFolder.listFiles()) {   
-		        String fileName = file.getName()            
-		        if (file.length() == 0) {
-		            fail(createdFolder.getPath() + ' folder contains an empty file')
-		        }
-		        
-		        if (!verifyFileName(fileName, entry.getValue())) {
-		            fail(createdFolder.getPath() + ' folder is missing ' + fileName)
-		        }
-		       
-		        if (getFileExtension(fileName).equals("java")) {
-		              String actual = SampleFileWriter.readContent(file);
+        for (Map.Entry<String, ArrayList<String>> entry : DIRECTORIES_TO_CHECK.entrySet()) {
+            int fileCount = 0
+            File createdFolder = new File(entry.getKey())
+            for (File file: createdFolder.listFiles()) {   
+                String fileName = file.getName()            
+                if (file.length() == 0) {
+                    fail(createdFolder.getPath() + ' folder contains an empty file')
+                }
+                
+                if (!verifyFileName(fileName, entry.getValue())) {
+                    fail(createdFolder.getPath() + ' folder is missing ' + fileName)
+                }
+               
+                if (getFileExtension(fileName).equals("java")) {
+                      String actual = SampleFileWriter.readContent(file);
                       SampleFileWriter.assertFileContent(new File(PATH_TO_TEST_PROJECT + "/verifiedGeneratedOutput", fileName), actual);
-		        }
-		        fileCount++
-		    }
-		    
-		    if (fileCount != 2) {
-		        fail(createdFolder.getName() + " folder contains an incorrect number of files")
-		    }
-		}    
+                }
+                fileCount++
+            }
+            
+            if (fileCount != 2) {
+                fail(createdFolder.getName() + " folder contains an incorrect number of files")
+            }
+        }    
     }
 
     @After
     public void tearDown() {
-        for (String directory : DIRECTORIES_TO_CHECK) {
-            clean(directory)
+        for (Map.Entry<String, ArrayList<String>> entry : DIRECTORIES_TO_CHECK.entrySet()) {
+            clean(entry.getKey())
         }
     }
     
