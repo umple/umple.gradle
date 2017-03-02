@@ -34,9 +34,9 @@ buildscript {
 }
 
 /* 
-    The TestSets plugin simplifies integration testing. By using the plugin, we just need to 
-    declare an integration test 'testSet' for an integrationTest task to be automatically generated for us. See 
-    https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing-with-the-testsets-plugin/
+  The TestSets plugin simplifies integration testing. By using the plugin, we just need to 
+  declare an integration test 'testSet' for an integrationTest task to be automatically generated for us. See 
+  https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing-with-the-testsets-plugin/
 */
 apply plugin: "org.unbroken-dome.test-sets"
 
@@ -50,17 +50,17 @@ testSets {
 }
 
 /*
-    Ensure that the outputs of the integration task are never "up-to-date" so that 
-    the integration test task runs fully every time we invoke it.
+  Ensure that the outputs of the integration task are never "up-to-date" so that 
+  the integration test task runs fully every time we invoke it.
 */
 project.integrationTest {
     outputs.upToDateWhen { false }
 }
 
 /*
-    Integration tests are run before the check task. Check is run as part of the build task, 
-    making the check test depend on integrationTest ensures integration tests are part of the build task.
- */
+  Integration tests are run before the check task. Check is run as part of the build task, 
+  making the check test depend on integrationTest ensures integration tests are part of the build task.
+*/
 check.dependsOn integrationTest 
 // Run unit tests before integration tests
 integrationTest.mustRunAfter test

@@ -27,8 +27,8 @@ class UmpleGradlePlugin implements Plugin<Project> {
     @Override
     void apply(final Project project) { 
         project.task('generateSource') << {     
-            // command line arguments can be specified through gradle by -P (-P is for project properties)
-            // eg: "gradle compileUmpleFile -PumpleFilePath=test.ump -PlanguageToGenerate=Java" 
+            // The user specifies paths relative to the main project directory, but
+            // to ensure correctness we need to use absolute paths internally  
             m_umpleFilePath = "${project.projectDir}/" 
             m_generatedOutputPath = "${project.projectDir}/"
         
