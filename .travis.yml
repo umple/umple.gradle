@@ -1,0 +1,9 @@
+script:
+    - wget 'http://cruise.eecs.uottawa.ca/umpleonline/scripts/umple.jar' -O libs/umple-latest.jar
+    - ./gradlew build
+  
+matrix:
+    include:
+        - os: linux
+          jdk: oraclejdk8
+        - os: osx
