@@ -3,16 +3,11 @@ buildscript {
     maven {
       url uri('libs')
     }
-    //flatDir dirs: "C:/Users/i_am_/workspace/umple.gradle/build/libs"
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
   }
   dependencies {
-    // Use the umple jar from the main umple.gradle project
     classpath files('libs/umple-latest.jar')
-    classpath "gradle.plugin.cruise.umple:UmpleGradlePlugin:0.1.2"
-    //classpath "umple.gradle.plugin:UmpleGradlePlugin-0.1.2"
+    // Use the locally built version of the plugin for the tests
+    classpath files('libs/UmpleGradlePlugin-0.1.3.jar')
   }
 }
 
