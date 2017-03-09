@@ -24,8 +24,13 @@ subprojects{
   apply plugin: "umple.gradle.plugin"
   apply plugin: "java"
   
+  // Attach the plugin properties to the generatedSource source set
   sourceSets {
-    generatedSource
+    generatedSource { 
+       ext.languageToGenerate = 'Java' 
+       ext.outputPath = 'customPath/generated/java'
+       ext.umpleFilePath = 'src/customPath/umple/master.ump'
+    }
   }
 
   compileGeneratedSourceJava.dependsOn('generateSource')
