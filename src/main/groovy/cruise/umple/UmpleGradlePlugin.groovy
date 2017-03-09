@@ -5,6 +5,7 @@ import cruise.umple.UmpleConsoleMain
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.SourceSet
 
 class UmpleGradlePlugin implements Plugin<Project> {
     // Project properties
@@ -20,7 +21,8 @@ class UmpleGradlePlugin implements Plugin<Project> {
     // Member variables
     private String m_languageToGenerate 
     private String m_generatedOutputPath
-    private m_umpleFilePath
+    private String m_umpleFilePath
+    private SourceSet m_generatedSourceSS
     private UmpleConsoleConfig m_consoleConfig 
     private UmpleConsoleMain m_consoleMain
 
@@ -31,26 +33,27 @@ class UmpleGradlePlugin implements Plugin<Project> {
             // to ensure correctness we need to use absolute paths internally  
             m_umpleFilePath = "${project.projectDir}/" 
             m_generatedOutputPath = "${project.projectDir}/"
-        
-            if(project.hasProperty(UMPLE_FILE_PATH))
+            m_generatedSourceSS = project.sourceSets.generatedSource
+
+            if(m_generatedSourceSS.hasProperty(UMPLE_FILE_PATH))
             {
-                m_umpleFilePath += project.getProperty(UMPLE_FILE_PATH) 
+                m_umpleFilePath += m_generatedSourceSS.getProperty(UMPLE_FILE_PATH) 
             } else {
                 m_umpleFilePath += DEFAULT_UMPLE_FILE_PATH
             }
             m_consoleConfig = new UmpleConsoleConfig(m_umpleFilePath) 
             
-            if(project.hasProperty(LANGUAGE_TO_GENERATE))
-            {
-                m_languageToGenerate = project.getProperty(LANGUAGE_TO_GENERATE)                
+            if(m_generatedSourceSS.hasProperty(LANGUAGE_TO_GENERATE))
+            {   
+                m_languageToGenerate = m_generatedSourceSS.getProperty(LANGUAGE_TO_GENERATE)                
             } else {
                 m_languageToGenerate = DEFAULT_LANGUAGE_TO_GENERATE
             }
             m_consoleConfig.setGenerate(m_languageToGenerate)
             
-            if(project.hasProperty(GENERATED_OUTPUT_PATH))
+            if(m_generatedSourceSS.hasProperty(GENERATED_OUTPUT_PATH))
             {
-                m_generatedOutputPath += project.getProperty(GENERATED_OUTPUT_PATH)
+                m_generatedOutputPath += m_generatedSourceSS.getProperty(GENERATED_OUTPUT_PATH)
             } else {
                 m_generatedOutputPath += DEFAULT_GENERATED_OUTPUT_PATH;
             }
@@ -59,13 +62,8 @@ class UmpleGradlePlugin implements Plugin<Project> {
             m_consoleMain = new UmpleConsoleMain(m_consoleConfig)
             m_consoleMain.runConsole()
             
-            addGeneratedToSource(project)
+            // Add generated files to the generatedSource source set as source files
+            m_generatedSourceSS.java.srcDir m_generatedOutputPath
         }    
-    }
-
-    void addGeneratedToSource(Project project) {
-        project.sourceSets.matching { it.name == "generatedSource" }.all {
-            it.java.srcDir m_generatedOutputPath
-        }
-    }       
+    }    
 }

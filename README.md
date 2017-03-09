@@ -1,26 +1,32 @@
 # umple.gradle.plugin
 
 **Tasks:**
-  - compileUmpleFile
+  - generateSource
 
 **Instructions:**
-To use, you must set the relevant project properties:
-  - umpleFileName (**required**)
-  - languageToGenerate (**required**)
-  - outputPath (**optional**)
+To use the plugin, you set the relevant plugin properties:
+  - umpleFilePath
+  - languageToGenerate
+  - outputPath
 
-These can be set either in a script, or through the command line. If any required fields are not set, an exception will be thrown.
+These values are set in the build.gradle file of the project you're applyung the plugin to. If any required fields are not set, the plugin will use the following default values:
+
+languageToGenerate = 'Java' 
+outputPath = 'generated/java'
+umpleFilePath = 'src/umple/master.ump'
+
+The plugin properties are attached to a SourceSet called generatedSource. You can declare the source set and set the plugin properties on the source set by including the following snippet in your project's build.gradle file:
   
-**Script:**
 ```
-project.ext.set("umpleFileName", "test.ump")
-project.ext.set("languageToGenerate", "Java")
+sourceSets {
+    generatedSource { 
+       ext.languageToGenerate = 'Java' 
+       ext.outputPath = 'path/to/generated/java'
+       ext.umpleFilePath = 'path/to/master.ump'
+    }
+}
 ```
-
-**Command Line**
-```
-gradle compileUmpleFile -PumpleFileName=test.ump -PlanguageToGenerate=Java
-```
+Make sure you modify the paths to suit your needs.
 
 The [Umple Compiler Jar](https://github.com/umple/Umple/releases/latest/) must also be present on your local machine and referenced as a buildscript dependency in the `build.gradle` file of the project that is applying the gradle plugin.
 
@@ -37,7 +43,7 @@ buildscript {
     }
     dependencies {
 		classpath files('libs/umple-latest.jar')
-		classpath group: 'cruise.umple', name: 'UmpleGradlePlugin',  version: '0.1.1'
+		classpath group: 'cruise.umple', name: 'UmpleGradlePlugin',  version: '0.1.3'
 		classpath 'de.undercouch:gradle-download-task:3.1.2'
     }
 }
