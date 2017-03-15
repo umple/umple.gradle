@@ -21,14 +21,12 @@ subprojects{
   
   // Attach the plugin properties to the generatedSource source set
   sourceSets {
-    generatedSource { 
-       ext.languageToGenerate = 'Java' 
-       ext.outputPath = 'customPath/generated/java'
-       ext.umpleFilePath = 'src/customPath/umple/master.ump'
+    main {
+      umple {
+        languageToGenerate = 'Java'
+        umpleFilePath = file('master.ump')
+      }
     }
   }
 
-  compileGeneratedSourceJava.dependsOn('generateSource')
 }
-
-compileJava.dependsOn(':subproj:compileGeneratedSourceJava', ':sub2:compileGeneratedSourceJava')

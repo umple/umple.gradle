@@ -83,3 +83,6 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+/UmpleGradlePlugin.iml
+/UmpleGradlePlugin.iws
+/UmpleGradlePlugin.ipr

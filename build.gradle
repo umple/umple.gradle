@@ -1,4 +1,7 @@
 apply plugin: 'groovy'
+apply plugin: 'java'
+
+apply plugin: 'idea'
 
 // Unless overridden in the pluginBundle config DSL, the project version will
 // be used as your plugin version when publishing
@@ -15,8 +18,10 @@ dependencies {
     compile localGroovy()
     compile files('libs/umple-latest.jar')
 
+    compile group: 'com.google.guava', name: 'guava', version: '21.0'
+
+    testCompile gradleTestKit()
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    testCompile group: 'com.google.guava', name: 'guava', version: '19.0'
 }
 
 // First, apply the publishing plugin
@@ -44,6 +49,7 @@ apply plugin: "org.unbroken-dome.test-sets"
 apply plugin: 'de.undercouch.download'
 apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'maven'
+apply plugin: 'java-gradle-plugin'
 
 task downloadUmpleJar(type: de.undercouch.gradle.tasks.download.Download) {
     onlyIfNewer true
@@ -59,10 +65,8 @@ testSets {
     integrationTest
 }
 
-/*
-  Ensure that the outputs of the integration task are never "up-to-date" so that 
-  the integration test task runs fully every time we invoke it.
-*/
+//  Ensure that the outputs of the integration task are never "up-to-date" so that
+//  the integration test task runs fully every time we invoke it.
 project.integrationTest {
     outputs.upToDateWhen { false }
 }
@@ -99,7 +103,7 @@ task copyPluginJars(type: Copy) {
     into  "${project.projectDir}/src/integrationTest/resources/TestProject/libs"
 }
 
-def getJar(final String pathToJar) {
+static getJar(final String pathToJar) {
     File jar = new File(pathToJar)
    
     if (!jar.isFile()) {
@@ -109,7 +113,19 @@ def getJar(final String pathToJar) {
     return jar
 }
 
+copyPluginJars.dependsOn('jar')
+
 integrationTest.dependsOn('copyUmpleJar', 'copyPluginJars')
+
+integrationTest {
+    testLogging {
+        // Make sure output from
+        // standard out or error is shown
+        // in Gradle output.
+        showStandardStreams = true
+    }
+}
+
 
 // The unit tests and integration test reports must be written to different directories
 tasks.withType(Test) {
@@ -154,4 +170,27 @@ pluginBundle {
             displayName = 'Umple Plugin'
         }
     }
+}
+
+gradlePlugin {
+    plugins {
+        umplePlugin {
+            id = "umple.gradle.plugin"
+            implementationClass = "cruise.umple.UmpleGradlePlugin"
+        }
+    }
+}
+
+configurations {
+    gradleRuntime
+}
+
+idea {
+    module {
+        scopes.RUNTIME.plus += [ configurations.gradleRuntime ]
+    }
+}
+
+dependencies {
+    gradleRuntime files("gradle/wrapper/gradle-wrapper.jar")
 }
