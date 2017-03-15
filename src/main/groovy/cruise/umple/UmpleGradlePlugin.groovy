@@ -6,6 +6,7 @@ import cruise.umple.UmpleConsoleMain
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
+import org.gradle.api.GradleException
 
 class UmpleGradlePlugin implements Plugin<Project> {
     // Project properties
@@ -33,6 +34,11 @@ class UmpleGradlePlugin implements Plugin<Project> {
             // to ensure correctness we need to use absolute paths internally  
             m_umpleFilePath = "${project.projectDir}/" 
             m_generatedOutputPath = "${project.projectDir}/"
+            
+            if(project.sourceSets.findByName("generatedSource") == null) {
+                throw new GradleException("Error: You must declare a generatedSource source set in your project's build.gradle file. See the readme for details")
+            }
+            
             m_generatedSourceSS = project.sourceSets.generatedSource
 
             if(m_generatedSourceSS.hasProperty(UMPLE_FILE_PATH))
