@@ -3,7 +3,7 @@ apply plugin: 'groovy'
 // Unless overridden in the pluginBundle config DSL, the project version will
 // be used as your plugin version when publishing
 group 'cruise.umple'
-version '0.1.2'
+version '0.1.3'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -30,7 +30,7 @@ buildscript {
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.6"
         classpath 'de.undercouch:gradle-download-task:3.2.0'
-        classpath "gradle.plugin.org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.3.2"
+        classpath "gradle.plugin.org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.3.2"       
     }
 }
 
@@ -77,27 +77,41 @@ integrationTest.mustRunAfter test
 
 // Copy the umple jar into a location that the TestProject used in the integration tests can access
 task copyUmpleJar(type: Copy) {
-    final String jarFolderPath = "${project.projectDir}/libs"
-    File jarFolder = new File(jarFolderPath)
-    if (!jarFolder.isDirectory()) {
-         throw new Exception("Unable to open " + jarFolderPath)
-    }
-    int numberCheckedFiles = 0
-    final File[] jarFolderContents = jarFolder.listFiles() as File[]
-    for (numberCheckedFiles; numberCheckedFiles < jarFolderContents.length; numberCheckedFiles++) {
-        if (jarFolderContents[numberCheckedFiles].getName().equals("umple-latest.jar")) {
-           break;
-        }
-    }
-    if (numberCheckedFiles == jarFolderContents.length) {
-        throw new Exception("Unable to locate a umple-latest.jar in " + jarFolderPath)
-    }
-    
-    from jarFolderPath
+    File umpleJar = getJar("${project.projectDir}/libs/umple-latest.jar")
+   
+    from umpleJar
     into "${project.projectDir}/src/integrationTest/resources/TestProject/libs"
+    
 }
 
-integrationTest.dependsOn copyUmpleJar
+/*
+  Copy the plugin jars into a location that the TestProject used in the integration tests can access.
+  
+  A Copy task learns where to read from and copy to during the configuration phase. This phase happens
+  before the execution phase, which is when the plugin jars get generated. That means we can't point
+  the copy task at a specific jar since the plugin jars don't exist at configuration time. Rather, we point 
+  the copy task at the /build/libs folder, since after the jar task executes this is where the plugin jars are stored. 
+  When the copy task executes before the integrationTest task and after the jar task it copies the newly-created jars in the
+  /build/libs folder to the TestProject.
+*/ 
+task copyPluginJars(type: Copy) {     
+    from "${project.projectDir}/build/libs"
+    into  "${project.projectDir}/src/integrationTest/resources/TestProject/libs"
+}
+
+def getJar(final String pathToJar) {
+    File jar = new File(pathToJar)
+   
+    if (!jar.isFile()) {
+        throw new Exception("Unable to locate a jar at " + pathToJar)
+    }
+    
+    return jar
+}
+
+copyPluginJars.dependsOn('jar')
+copyUmpleJar.dependsOn('downloadUmpleJar')
+integrationTest.dependsOn('copyUmpleJar', 'copyPluginJars')
 
 // The unit tests and integration test reports must be written to different directories
 tasks.withType(Test) {
