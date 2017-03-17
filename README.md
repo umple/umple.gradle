@@ -1,7 +1,8 @@
 # umple.gradle.plugin
 
 **Tasks:**
-  - generateSource - compileGeneratedSourceJava
+  - generateSource 
+  - compileGeneratedSourceJava
 
 **Instructions:**
 The plugin relies on three key configuration values:
