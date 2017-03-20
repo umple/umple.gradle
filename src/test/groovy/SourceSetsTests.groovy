@@ -31,10 +31,10 @@ class SourceSetsTests {
         buildFile << """
             // Add required plugins and source sets to the sub projects
             plugins { id "umple.gradle.plugin" } // Note must use this syntax
-            
+
             sourceSets {
                 main {
-                    umple { }
+                    umple {}
                 }
             }
 
@@ -56,7 +56,7 @@ class SourceSetsTests {
                 }
             }
         """
-
+        
         def result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withPluginClasspath()
@@ -65,7 +65,7 @@ class SourceSetsTests {
 
         Properties props = getProperties(result.output)
 
-        assertEquals("invalid generator", UmpleLanguage.valueOf(props.get("umple.languageToGenerate").toString()), UmpleLanguage.PHP)
+        assertEquals("invalid generator", UmpleLanguage.valueOf(props.get("umple.languageToGenerate").toString()), UmpleLanguage.JAVA)
         assertTrue("invalid file path", Paths.get((String)props.get("umple.umpleFilePath")).endsWith("master.ump"))
     }
 
