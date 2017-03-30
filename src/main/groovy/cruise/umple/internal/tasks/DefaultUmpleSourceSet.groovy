@@ -25,12 +25,14 @@ class DefaultUmpleSourceSet implements UmpleSourceSet {
 
     @Override
     UmpleSourceSet umple(Closure configureClosure) {
+        println("processing the umple{} closure from the build file")      
+       
         configure(configureClosure, umple)
-        this
+        this // Return the DefaultUmpleSourceSet associated with this call to umple
     }
 
     @Override
-    DefaultUmpleSourceSet umple(Action<? extends SourceDirectorySet> configureAction) {
+    DefaultUmpleSourceSet umple(Action<DefaultUmpleOptions> configureAction) {
         configureAction.execute(getUmple())
         this
     }

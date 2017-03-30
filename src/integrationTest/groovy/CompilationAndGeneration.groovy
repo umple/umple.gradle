@@ -49,7 +49,7 @@ public class CompilationAndGeneration {
             for (File file: createdFolder.listFiles()) {   
                 String fileName = file.getName()            
                 if (file.length() == 0) {
-                    fail(createdFolder.getPath() + ' folder contains an empty file')
+                    fail(createdFolder.getPath() + ' folder contains an empty file') //TODO this is broken
                 }
                 
                 if (!verifyFileName(fileName, entry.getValue())) {
@@ -72,7 +72,7 @@ public class CompilationAndGeneration {
     @After
     public void tearDown() {
         for (Map.Entry<String, ArrayList<String>> entry : DIRECTORIES_TO_CHECK.entries()) {
-            destroy(entry.getKey())
+            //destroy(entry.getKey()) //TODO uncomment this once we verify the generation stuff is working
         }
     }
            

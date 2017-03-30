@@ -1,5 +1,6 @@
 package cruise.umple.tasks
 
+import cruise.umple.internal.tasks.DefaultUmpleOptions
 import org.gradle.api.Action
 import org.gradle.api.file.SourceDirectorySet
 /**
@@ -29,5 +30,6 @@ interface UmpleSourceSet {
      *
      * @return Umple source, never {@code null}
      */
-    UmpleSourceSet umple(Action<? extends SourceDirectorySet> configureAction)
+    UmpleSourceSet umple(Action<DefaultUmpleOptions> configureAction)
+    //UmpleSourceSet umple(Action<? super SourceDirectorySet> configureAction)
 }

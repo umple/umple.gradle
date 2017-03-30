@@ -17,13 +17,18 @@ class UmpleGenerateTask extends SourceTask {
 
     private UmpleLanguage m_languageToGenerate
     private File m_umpleFile
-    private File m_outputRootDir
+    private File m_outputDir
 
     private UmpleSourceSet m_sourceSet
 
     UmpleGenerateTask() {
-        m_languageToGenerate = globals.languageToGenerate
-        m_umpleFile = globals.umpleFilePath
+        println("Setting defaults for UmpleGenerateTask")
+        m_languageToGenerate = getGlobals().languageToGenerate
+        println(m_languageToGenerate)
+        m_umpleFile = getGlobals().umpleFilePath
+        println(m_umpleFile)
+        m_outputDir = getGlobals().generatedOutputPath
+        println(m_outputDir)
     }
 
     private UmpleOptions getGlobals() {
@@ -60,16 +65,16 @@ class UmpleGenerateTask extends SourceTask {
 
     @OutputDirectory
     File getOutputDir() {
-        Paths.get(m_outputRootDir.getPath(), m_languageToGenerate.toString().toLowerCase()).toFile()
+        Paths.get(m_outputDir.getPath(), m_languageToGenerate.toString().toLowerCase()).toFile()
     }
 
     @Input
-    File getOutputRootDir() {
-        return m_outputRootDir
+    File getoutputDir() {
+        return m_outputDir
     }
 
-    void setOutputRootDir(File outputDir) {
-        this.m_outputRootDir = outputDir
+    void setoutputDir(File outputDir) {
+        this.m_outputDir = outputDir
     }
 
 
@@ -91,7 +96,7 @@ class UmpleGenerateTask extends SourceTask {
         // Add generated files to the generatedSource source set as source files
 
         if (m_languageToGenerate == UmpleLanguage.JAVA) {
-            sourceSet.java.srcDir outputDir
+            sourceSet.java.srcDir m_outputDir
 
             project.tasks.getByName(JavaPlugin.COMPILE_JAVA_TASK_NAME).dependsOn this
         }

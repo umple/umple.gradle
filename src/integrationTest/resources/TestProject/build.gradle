@@ -15,7 +15,7 @@ buildscript {
 apply plugin: 'java'
  
 // Add required plugins and source sets to the sub projects
-subprojects{
+subprojects {
   apply plugin: "umple.gradle.plugin"
   apply plugin: "java"
   
@@ -25,6 +25,7 @@ subprojects{
       umple {
         languageToGenerate = 'Java'
         umpleFilePath = file('master.ump')
+        generatedOutputPath = file('customPath/generated/java')
       }
     }
   }

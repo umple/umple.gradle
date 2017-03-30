@@ -34,10 +34,11 @@ class SourceSetsTests {
 
             sourceSets {
                 main {
-                    umple {}
+                   umple {}
                 }
             }
 
+            // Override defaults
             umple {
               languageToGenerate = 'Java'
               umpleFilePath = file('master.ump')
