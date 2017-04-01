@@ -32,7 +32,7 @@ class UmpleGenerateTask extends SourceTask {
     }
 
     private UmpleOptions getGlobals() {
-        return (UmpleOptions)(getProject().getExtensions().getByName(UmpleOptions.NAME));
+        return (UmpleOptions)(getProject().getExtensions().getByName(UmpleOptions.NAME)); // get defaults defined in UmpleOptions.groovy
     }
 
     @Input
@@ -96,7 +96,7 @@ class UmpleGenerateTask extends SourceTask {
         // Add generated files to the generatedSource source set as source files
 
         if (m_languageToGenerate == UmpleLanguage.JAVA) {
-            sourceSet.java.srcDir m_outputDir
+            m_sourceSet.java.srcDir m_outputDir
 
             project.tasks.getByName(JavaPlugin.COMPILE_JAVA_TASK_NAME).dependsOn this
         }
