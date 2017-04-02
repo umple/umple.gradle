@@ -2,30 +2,24 @@ package cruise.umple.tasks
 
 import cruise.umple.UmpleLanguage
 /**
- * Created by kevin on 15/03/2017.
+ * Defines the options required to configure compilation of umple files
  */
 interface UmpleOptions {
 
     static final String NAME = "umple"
 
-    public static final UmpleLanguage DEFAULT_LANGUAGE_TO_GENERATE = UmpleLanguage.JAVA
-    public static final File DEFAULT_UMPLE_FILE = new File("src/umple/Master.ump")
-    public static final File DEFAULT_GENERATED_OUTPUT_PATH = new File("generated/java")
+    public static final List<UmpleLanguage> DEFAULT_LANGUAGE_TO_GENERATE = [UmpleLanguage.JAVA]
+    public static final List<File> DEFAULT_MASTER_FILE = [new File("Master.ump")]
+    public static final File DEFAULT_GENERATED_OUTPUT = new File("generated/")
 
-    UmpleLanguage getLanguageToGenerate()
+    List<UmpleLanguage> getLanguage()
+    void setLanguage(UmpleLanguage language)
+    void setLanguage(List<UmpleLanguage> languages)
 
-    void setLanguageToGenerate(UmpleLanguage language)
+    List<File> getMaster()
+    void setMaster(File master)
+    void setMaster(List<File> masters)
 
-    File getUmpleFilePath()
-
-    void setUmpleFilePath(File path)
-    void setUmpleFilePath(String path)
-    
-    File getGeneratedOutputPath()
-    
-    void setGeneratedOutputPath(File path)
-    void setGeneratedOutputPath(String path)
-    
-
-
+    File getOutput()
+    void setOutput(File f)
 }

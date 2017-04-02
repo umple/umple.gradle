@@ -7,7 +7,7 @@ import org.gradle.api.file.SourceDirectorySet
  *
  * Based on {@link org.gradle.api.tasks.ScalaSourceSet}.
  */
-interface UmpleSourceSet {
+interface UmpleSourceSet extends UmpleOptions {
 
     /**
      * Returns the source that will be compiled by Umple
@@ -29,6 +29,5 @@ interface UmpleSourceSet {
      *
      * @return Umple source, never {@code null}
      */
-    UmpleSourceSet umple(Action<UmpleOptions> configureAction)
-    //UmpleSourceSet umple(Action<? super SourceDirectorySet> configureAction)
+    UmpleSourceSet umple(Action<? extends UmpleOptions> configureAction)
 }

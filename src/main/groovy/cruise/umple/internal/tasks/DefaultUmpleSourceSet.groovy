@@ -9,19 +9,13 @@ import static org.gradle.util.ConfigureUtil.configure
 /**
  * Default implemenation of {@link UmpleSourceSet}
  */
-class DefaultUmpleSourceSet implements UmpleSourceSet {
+class DefaultUmpleSourceSet extends DefaultUmpleOptions implements UmpleSourceSet {
 
-    private SourceDirectorySet umple;
-    private UmpleGenerateTask genTask;
-    File umpleFilePath;
+    private SourceDirectorySet umple
 
     DefaultUmpleSourceSet(String name, SourceDirectorySetFactory sourceDirectorySetFactory) {
         this.umple = sourceDirectorySetFactory.create(name + " Umple Source")
         umple.include "**/*.ump" // TODO static field
-    }
-
-    void setUmpleGenerateTask(UmpleGenerateTask genTask) {
-        this.genTask = genTask
     }
 
     @Override
@@ -34,17 +28,14 @@ class DefaultUmpleSourceSet implements UmpleSourceSet {
         println("processing the umple{} closure from the build file")      
        
         configure(configureClosure, umple)
-        genTask.setUmpleFile umpleFilePath
-        //umple.srcDir 'C:/Users/i_am_/workspace/Umple Gradle Test/sub2/src/custom/umple' //TODO replace this with the absolute path on your machine, or get it from the project
-       
-        this // Return the DefaultUmpleSourceSet associated with this call to umple
-    }
 
-    @Override
-    UmpleSourceSet umple(Action<UmpleOptions> configureAction) {
-        configureAction.execute(getUmple())
         this
     }
 
-
+    @Override
+    UmpleSourceSet umple(Action<? extends UmpleOptions> configureAction) {
+        println("processing the umple{} closure from umple(Action<UmpleOptions> configureAction)")
+        configureAction.execute(this)
+        this
+    }
 }

@@ -1,45 +1,57 @@
 package cruise.umple.internal.tasks
 
+import com.google.common.base.MoreObjects
 import cruise.umple.UmpleLanguage
 import cruise.umple.tasks.UmpleOptions
 
+import static com.google.common.base.Preconditions.checkNotNull
 /**
- * Created by kevin on 15/03/2017.
+ * Default implmentation of the UmpleOptions interface
  */
 class DefaultUmpleOptions implements UmpleOptions {
 
-    def UmpleLanguage languageToGenerate
-    def File umpleFilePath
-    def File generatedOutputPath
+    def List<UmpleLanguage> language
+
+    def List<File> master
+    def File output
 
     DefaultUmpleOptions() {
-        languageToGenerate = DEFAULT_LANGUAGE_TO_GENERATE
-        umpleFilePath = DEFAULT_UMPLE_FILE
-        generatedOutputPath = DEFAULT_GENERATED_OUTPUT_PATH
-    }
-    
-    @Override
-    void setLanguageToGenerate(UmpleLanguage language) {
-        this.languageToGenerate = language
+        language = null
+        master = null
+        output = null
     }
 
     @Override
-    void setUmpleFilePath(File path) {
-        this.umpleFilePath = path
+    void setLanguage(UmpleLanguage language) {
+        this.language = [checkNotNull(language, "language == null")]
     }
 
     @Override
-    void setUmpleFilePath(String path) {
-        this.umpleFilePath = new File(path)
-    }
-    
-    @Override
-    void setGeneratedOutputPath(File path) {
-        this.generatedOutputPath = path
+    void setMaster(File master) {
+        this.master = [checkNotNull(master, "master == null")]
     }
 
     @Override
-    void setGeneratedOutputPath(String path) {
-        this.generatedOutputPath = new File(path)
+    void setLanguage(List<UmpleLanguage> languages) {
+        this.language = checkNotNull(languages, "languages == null")
+    }
+
+    @Override
+    void setMaster(List<File> masters) {
+        this.master = checkNotNull(masters, "masters == null")
+    }
+
+    @Override
+    void setOutput(File output) {
+        this.output = checkNotNull(output, "output == null")
+    }
+
+    @Override
+    String toString() {
+        MoreObjects.toStringHelper(this)
+                .add("language", language)
+                .add("master", master)
+                .add("output", output)
+                .toString()
     }
 }

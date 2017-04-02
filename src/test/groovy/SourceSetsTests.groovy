@@ -5,8 +5,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
-import java.nio.file.Paths
-
 import static junit.framework.Assert.assertEquals
 import static org.junit.Assert.assertTrue
 /**
@@ -34,21 +32,23 @@ class SourceSetsTests {
 
             sourceSets {
                 main {
-                   umple {}
+                    umple {
+                        master = file('other.ump')
+                    }
                 }
             }
 
             // Override defaults
             umple {
-              languageToGenerate = 'Java'
-              umpleFilePath = file('master.ump')
+              language = 'Php'
+              master = [file('master.ump')]
             }
             
             task checkUmple {
                 doLast {
                     Properties props = new Properties()
-                    props.put('umple.languageToGenerate', umple.languageToGenerate.toString())
-                    props.put('umple.umpleFilePath', umple.umpleFilePath.toString())
+                    props.put('umple.language', umple.language.toString())
+                    props.put('umple.master', umple.master.toString())
                     
                     println '${PROP_START}'
                     props.store(System.out, null)
@@ -66,8 +66,8 @@ class SourceSetsTests {
 
         Properties props = getProperties(result.output)
 
-        assertEquals("invalid generator", UmpleLanguage.valueOf(props.get("umple.languageToGenerate").toString()), UmpleLanguage.JAVA)
-        assertTrue("invalid file path", Paths.get((String)props.get("umple.umpleFilePath")).endsWith("master.ump"))
+        assertEquals("invalid generator", [UmpleLanguage.PHP].toString(), props.get("umple.language").toString())
+        assertTrue("invalid file path", ((String)props.get("umple.master")).endsWith("master.ump]"))
     }
 
     private static final PROP_START = 'PROPERTIES_START'

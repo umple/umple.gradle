@@ -5,7 +5,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Before
 import org.junit.Test
 
-import static junit.framework.Assert.assertEquals
+import static junit.framework.Assert.assertNull
 import static org.junit.Assert.assertTrue
 
 class Basic {
@@ -27,11 +27,10 @@ class Basic {
 
         UmpleOptions config = testProject.umple
 
-        assertEquals("languageToGenerate",
-                UmpleOptions.DEFAULT_LANGUAGE_TO_GENERATE,
-                config.languageToGenerate)
-        assertEquals("umpleFilePath",
-                UmpleOptions.DEFAULT_UMPLE_FILE,
-                config.umpleFilePath)
+        assertNull("language", config.language)
+        assertNull("master", config.master)
+        assertNull("output", config.output)
     }
+
+    // TODO Tests that use the mutators and validate it
 }

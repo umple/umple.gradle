@@ -23,9 +23,9 @@ subprojects {
   sourceSets {
     main {
       umple {
-        languageToGenerate = 'Java'
-        umpleFilePath = file('master.ump')
-        generatedOutputPath = file('customPath/generated/java')
+        language = 'Java'
+        master = file('master.ump')
+        output = { -> file('customPath/generated/\${language}') }
       }
     }
   }

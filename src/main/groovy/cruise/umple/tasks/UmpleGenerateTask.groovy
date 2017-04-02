@@ -4,101 +4,79 @@ import cruise.umple.UmpleConsoleConfig
 import cruise.umple.UmpleConsoleMain
 import cruise.umple.UmpleLanguage
 import org.gradle.api.plugins.JavaPlugin
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.SourceTask
+import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.incremental.IncrementalTaskInputs
 
 import java.nio.file.Paths
-
-import static com.google.common.base.Preconditions.checkNotNull
 /**
  * Created by kevin on 15/03/2017.
  */
 class UmpleGenerateTask extends SourceTask {
 
-    private UmpleLanguage m_languageToGenerate
-    private File m_umpleFile
-    private File m_outputDir
+    def List<UmpleOptions> compileConfigs
 
-    private UmpleSourceSet m_sourceSet
+    private UmpleSourceSet sourceSet
 
     UmpleGenerateTask() {
+        compileConfigs = new ArrayList<>()
+    }
+
+    private void loadGlobals(UmpleOptions opts) {
+
+        // get defaults defined in UmpleOptions.groovy
+        UmpleOptions globals = (UmpleOptions)(getProject().getExtensions().getByName(UmpleOptions.NAME))
         println("Setting defaults for UmpleGenerateTask")
-        m_languageToGenerate = getGlobals().languageToGenerate
-        println(m_languageToGenerate)
-        m_umpleFile = getGlobals().umpleFilePath
-        println(m_umpleFile)
-        m_outputDir = getGlobals().generatedOutputPath
-        println(m_outputDir)
+
+        if (!opts.language) {
+            opts.language = globals.language
+        }
+
+        if (!opts.master) {
+            opts.master = globals.master
+        }
+
+        if (!opts.output) {
+            opts.output = globals.output
+        }
     }
 
-    private UmpleOptions getGlobals() {
-        return (UmpleOptions)(getProject().getExtensions().getByName(UmpleOptions.NAME)); // get defaults defined in UmpleOptions.groovy
-    }
-
-    @Input
-    UmpleSourceSet getSourceSet() {
-        m_sourceSet
-    }
-
-    void setSourceSet(UmpleSourceSet set) {
-        m_sourceSet = checkNotNull(set, "set == null")
-    }
-
-    @Input @Optional
-    UmpleLanguage getLanguageToGenerate() {
-        m_languageToGenerate
-    }
-
-    void setLanguageToGenerate(UmpleLanguage languageToGenerate) {
-        checkNotNull(languageToGenerate, "languageToGenerate == null")
-        this.m_languageToGenerate = languageToGenerate
-    }
-
-    @InputFile @Optional
-    File getUmpleFile() {
-        m_umpleFile
-    }
-
-    void setUmpleFile(File umpleFile) {
-        this.m_umpleFile = umpleFile;
-    }
-
-    @OutputDirectory
-    File getOutputDir() {
-        Paths.get(m_outputDir.getPath(), m_languageToGenerate.toString().toLowerCase()).toFile()
-    }
-
-    @Input
-    File getoutputDir() {
-        return m_outputDir
-    }
-
-    void setoutputDir(File outputDir) {
-        this.m_outputDir = outputDir
-    }
-
-
-    @TaskAction
-    void execute(IncrementalTaskInputs inputs) {
+    void executeFor(UmpleOptions opts) {
         // currently we can't do incremental builds
 
-        println("language = " + m_languageToGenerate)
+        println("languages = " + opts.language)
 
         // The user specifies paths relative to the main project directory, but
         // to ensure correctness we need to use absolute paths internally
 
-        UmpleConsoleConfig consoleConfig = new UmpleConsoleConfig(Paths.get(project.path, m_umpleFile.path).toString())
-        consoleConfig.path = Paths.get(project.buildDir.path, outputDir.toString()).toString()
+        for (UmpleLanguage language: opts.language) {
 
-        UmpleConsoleMain consoleMain = new UmpleConsoleMain(consoleConfig)
-        consoleMain.runConsole()
+            List<File> masters = opts.master.collect { path -> Paths.get(project.path, path.toString()).toFile() }
+            UmpleConsoleConfig consoleConfig = new UmpleConsoleConfig(masters.get(0).toString())
 
-        // Add generated files to the generatedSource source set as source files
+            if (masters.size() > 1) {
+                opts.master.forEach{ f -> consoleConfig.addLinkedFile(f.toString()) }
+            }
 
-        if (m_languageToGenerate == UmpleLanguage.JAVA) {
-            m_sourceSet.java.srcDir m_outputDir
+            consoleConfig.generate = language.toString().toLowerCase()
+            consoleConfig.path = Paths.get(project.buildDir.path, opts.output.toString()).toString()
 
-            project.tasks.getByName(JavaPlugin.COMPILE_JAVA_TASK_NAME).dependsOn this
+            UmpleConsoleMain consoleMain = new UmpleConsoleMain(consoleConfig)
+            consoleMain.runConsole()
+
+            // Add generated files to the generatedSource source set as source files
+
+            if (language == UmpleLanguage.JAVA) {
+                sourceSet.java.srcDir consoleConfig.path
+
+                project.tasks.getByName(JavaPlugin.COMPILE_JAVA_TASK_NAME).dependsOn this
+            }
         }
+    }
+
+    @TaskAction
+    void execute(IncrementalTaskInputs inputs) {
+        println("Compiling for " + sourceSet)
+        compileConfigs.collect{ config -> this.executeFor(config) }
     }
 }

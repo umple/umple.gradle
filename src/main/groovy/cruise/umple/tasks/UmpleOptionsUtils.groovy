@@ -8,14 +8,13 @@ import static com.google.common.base.Preconditions.checkNotNull
  * Created by kevin on 15/03/2017.
  */
 class UmpleOptionsUtils {
-    private UmpleOptionsUtils() {
 
-    }
+    private UmpleOptionsUtils() { }
 
 
     static UmpleOptions forProject(Project project) {
         checkNotNull(project, "project == null")
 
-        (UmpleOptions) project.extensions.getByName("umple")
+        (UmpleOptions) project.extensions.getByName(UmpleOptions.NAME)
     }
 }
