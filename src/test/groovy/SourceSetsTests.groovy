@@ -7,8 +7,7 @@ import org.junit.rules.TemporaryFolder
 
 import java.nio.file.Paths
 
-import static junit.framework.Assert.assertEquals
-import static org.junit.Assert.assertTrue
+import static org.junit.Assert.assertEquals
 /**
  * Checks the behaviour of overriding globals in a project
  */
@@ -55,10 +54,10 @@ class SourceSetsTests {
                     props.put('umple.master', umple.master.get(0).getName())
                     props.put('umple.outputDir', umple.outputDir.toString())
                     
-                    println '${PROP_START}'
+                    println '${PropertiesUtil.PROP_START}'
                     props.store(System.out, null)
                     println ''
-                    println '${PROP_END}'
+                    println '${PropertiesUtil.PROP_END}'
                 }
             }
         """
@@ -69,7 +68,7 @@ class SourceSetsTests {
                 .withArguments('checkUmple')
                 .build()
 
-        Properties props = getProperties(result.output)
+        Properties props = PropertiesUtil.getProperties(result.output)
 
         assertEquals("invalid generator", [UmpleLanguage.PHP].toString(), props.get("umple.language").toString())
         assertEquals("invalid outputDir",
@@ -78,28 +77,6 @@ class SourceSetsTests {
         // TODO this fails because we don't update master using the value from the umple closure within the main source set 
 		// unless we run the UmpleGenerateTask
         //assertTrue("invalid file path: " + (String)props.get("umple.master"), ((String)props.get("umple.master")).equals("other.ump")) 
-    }
-
-    private static final PROP_START = 'PROPERTIES_START'
-    private static final PROP_END = 'PROPERTIES_END'
-
-    private static Properties getProperties(String input) {
-        assertTrue('Could not find start of properties in output', input.contains(PROP_START))
-        assertTrue('Could not find end of properties in output', input.contains(PROP_END))
-        int start = input.indexOf(PROP_START) + PROP_START.size()
-        int end = input.indexOf(PROP_END)
-
-        Properties res = new Properties()
-        StringReader reader = new StringReader(input.substring(start, end).trim())
-        try {
-            res.load(reader)
-        } catch (IOException ioe) {
-            throw new IllegalArgumentException(ioe)
-        } finally {
-            reader.close()
-        }
-
-        res
     }
 
 }

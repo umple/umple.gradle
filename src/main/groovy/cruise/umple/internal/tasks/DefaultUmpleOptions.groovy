@@ -3,6 +3,7 @@ package cruise.umple.internal.tasks
 import com.google.common.base.MoreObjects
 import cruise.umple.UmpleLanguage
 import cruise.umple.tasks.UmpleOptions
+import cruise.umple.tasks.UmpleOptionsUtils
 
 import static com.google.common.base.Preconditions.checkNotNull
 /**
@@ -42,7 +43,6 @@ class DefaultUmpleOptions implements UmpleOptions {
 
     @Override
     void setMaster(File master) {
-        println("Setting user value for master in DefaultUmpleOptions: " + master)
         this.master = [checkNotNull(master, "master == null")]
     }
 
@@ -59,6 +59,11 @@ class DefaultUmpleOptions implements UmpleOptions {
     @Override
     File getOutputDir() {
         this.outputDir
+    }
+
+    @Override
+    File resolveOutputDir(UmpleLanguage language) {
+        UmpleOptionsUtils.getOutputDir(outputDir, language)
     }
 
     @Override

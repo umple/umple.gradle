@@ -12,6 +12,8 @@ interface UmpleOptions {
     public static final List<File> DEFAULT_MASTER_FILE = [new File("Master.ump")]
     public static final File DEFAULT_GENERATED_OUTPUT = new File("generated/")
 
+    public static final LANGUAGE_TAG = "\\\$\\{language\\}"
+
     List<UmpleLanguage> getLanguage()
     void setLanguage(UmpleLanguage language)
     void setLanguage(List<UmpleLanguage> languages)
@@ -22,4 +24,11 @@ interface UmpleOptions {
 
     File getOutputDir()
     void setOutputDir(File f)
+
+    /**
+     * Gets the output directory relative to the current state
+     * @param language
+     * @return
+     */
+    File resolveOutputDir(UmpleLanguage language)
 }

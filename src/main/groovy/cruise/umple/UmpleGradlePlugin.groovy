@@ -96,14 +96,18 @@ class UmpleGradlePlugin implements Plugin<Project> {
         UmpleGenerateTask umpleGenerate = project.tasks.create(taskName, UmpleGenerateTask.class)
 
         umpleGenerate.description = "Compiles the " + sourceSet + "."
-        umpleGenerate.setSourceSet(sourceSet) // the source set must be configured when UmpleGenerateTask is run so that compileSourceSetJava works properly
         umpleGenerate.source = umpleSourceSet.umple //source directory for the compileUmple task is the SourceDirectorySet in DefaultUmpleSourceSet
         umpleGenerate.compileConfig = umpleSourceSet // Now we add a configuration to the task
+
+        // TODO Should this be static here? It feels very wrong.
+        umpleGenerate.sourceRoot = project.projectDir.toPath().resolve("src/${sourceSet.name}/umple").toFile()
 
         if (umpleGenerate.compileConfig.language.contains(UmpleLanguage.JAVA)) {
             // TODO Add flag to turn this on/off
             project.tasks.getByName(sourceSet.compileJavaTaskName).dependsOn umpleGenerate
         }
+
+        project.tasks.getByName("build").dependsOn umpleGenerate
 
     }
 }
