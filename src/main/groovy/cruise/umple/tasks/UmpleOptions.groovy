@@ -20,6 +20,6 @@ interface UmpleOptions {
     void setMaster(File master)
     void setMaster(List<File> masters)
 
-    File getOutput()
-    void setOutput(File f)
+    File getOutputDir()
+    void setOutputDir(File f)
 }

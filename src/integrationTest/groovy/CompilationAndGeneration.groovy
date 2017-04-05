@@ -72,7 +72,7 @@ public class CompilationAndGeneration {
     @After
     public void tearDown() {
         for (Map.Entry<String, ArrayList<String>> entry : DIRECTORIES_TO_CHECK.entries()) {
-            //destroy(entry.getKey()) //TODO uncomment this once we verify the generation stuff is working
+            destroy(entry.getKey())
         }
     }
            

@@ -29,7 +29,7 @@ class Basic {
 
         assertNull("language", config.language)
         assertNull("master", config.master)
-        assertNull("output", config.output)
+        assertNull("output", config.outputDir)
     }
 
     // TODO Tests that use the mutators and validate it

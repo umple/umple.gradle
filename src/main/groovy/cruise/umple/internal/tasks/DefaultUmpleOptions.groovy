@@ -11,14 +11,13 @@ import static com.google.common.base.Preconditions.checkNotNull
 class DefaultUmpleOptions implements UmpleOptions {
 
     def List<UmpleLanguage> language
-
     def List<File> master
-    def File output
+    def File outputDir // we can't use the name output. It's reserved by the java plugin
 
     DefaultUmpleOptions() {
         language = null
         master = null
-        output = null
+        outputDir = null
     }
 
     @Override
@@ -28,6 +27,7 @@ class DefaultUmpleOptions implements UmpleOptions {
 
     @Override
     void setMaster(File master) {
+        println("Setting user value for master in DefaultUmpleOptions: " + master)
         this.master = [checkNotNull(master, "master == null")]
     }
 
@@ -42,8 +42,8 @@ class DefaultUmpleOptions implements UmpleOptions {
     }
 
     @Override
-    void setOutput(File output) {
-        this.output = checkNotNull(output, "output == null")
+    void setOutputDir(File output) {
+        this.outputDir = checkNotNull(output, "output == null")
     }
 
     @Override
@@ -51,7 +51,7 @@ class DefaultUmpleOptions implements UmpleOptions {
         MoreObjects.toStringHelper(this)
                 .add("language", language)
                 .add("master", master)
-                .add("output", output)
+                .add("output", outputDir)
                 .toString()
     }
 }

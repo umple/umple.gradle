@@ -32,9 +32,10 @@ class UmpleGradlePlugin implements Plugin<Project> {
     @Override
     void apply(final Project project) {
         //println("Inside apply")
-        // We use sourceSets because its convenient
+        // We use sourceSets because it's convenient
         project.getPluginManager().apply(JavaBasePlugin)
 
+        // Create the default umple closure
         project.extensions.add("umple", DefaultUmpleOptions)
 
         final Configuration umpleConfig = project.configurations.create(UMPLE_CONFIGURATION_NAME)
@@ -53,7 +54,8 @@ class UmpleGradlePlugin implements Plugin<Project> {
 
             // Get the convention and add the properties
             Convention sourceSetConvention = (Convention) InvokerHelper.getProperty(sourceSet, "convention")
-            // We create a new umple source set
+
+            // Create the Umple closure within the source set, e.g. main { umple{} }
             DefaultUmpleSourceSet umpleSourceSet = new DefaultUmpleSourceSet(sourceSet.name, sourceDirectorySetFactory)
             sourceSetConvention.plugins.put("umple", umpleSourceSet)
 
@@ -61,7 +63,10 @@ class UmpleGradlePlugin implements Plugin<Project> {
             final SourceDirectorySet umpleDirectorySet = umpleSourceSet.umple
             // set the name of the directory to be src/SOURCE SET NAME/umple, which is our convention
             // TODO address this convention?
-            umpleDirectorySet.srcDir { project.file("src/" + sourceSet.getName() + "/umple") }
+            // Tell Gradle where to look for umple files when the compileUmple task is invoked. 
+            // Used to check for incremental builds (compileUmple only runs if the files in this folder have changed).
+            // This location is updated if the user specifies a custom path to the master.ump file (we set srcDir to the location of the master.ump file)
+            umpleDirectorySet.srcDir { project.file("src/" + sourceSet.getName() + "/umple") } 
 
             // Add the source to all of the required sources
             sourceSet.allSource.source umpleDirectorySet
@@ -91,16 +96,16 @@ class UmpleGradlePlugin implements Plugin<Project> {
 
         // If it doesn't exist, we have to create the task and initialize it properly
         if (!umpleGenerate) {
+            println("Adding generate task")
             umpleGenerate = project.tasks.create(taskName, UmpleGenerateTask.class)
 
             umpleGenerate.description = "Compiles the " + sourceSet + "."
+            umpleGenerate.setSourceSet(sourceSet) // the source set must be configured when UmpleGenerateTask is run so that compileSourceSetJava works properly
             umpleGenerate.source = umpleSourceSet.umple //source directory for the compileUmple task is the SourceDirectorySet in DefaultUmpleSourceSet
             project.tasks.getByName(sourceSet.classesTaskName).dependsOn taskName
         }
 
         // Now we add a configuration to the task
         umpleGenerate.compileConfigs.add(umpleSourceSet)
-
-        println("umpleFilePath in addAndConfigureUmpleGenerae It's " + umpleSourceSet.master)
     }
 }
