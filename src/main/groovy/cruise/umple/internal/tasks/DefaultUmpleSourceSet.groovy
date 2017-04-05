@@ -1,13 +1,13 @@
 package cruise.umple.internal.tasks
 
-import cruise.umple.tasks.*
+import cruise.umple.tasks.UmpleOptions
+import cruise.umple.tasks.UmpleSourceSet
 import org.gradle.api.Action
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.SourceDirectorySetFactory
 
-import static org.gradle.util.ConfigureUtil.configure
 import static com.google.common.base.Preconditions.checkNotNull
-import java.nio.file.Paths
+import static org.gradle.util.ConfigureUtil.configure
 /**
  * Default implemenation of {@link UmpleSourceSet}
  */
@@ -28,14 +28,14 @@ class DefaultUmpleSourceSet extends DefaultUmpleOptions implements UmpleSourceSe
     @Override //TODO refactor. When we set a new master file we must update srcDir to make sure incremental bulds work properly
     void setMaster(File master) {
         this.master = [checkNotNull(master, "master == null")]
-        println("Updating srcDir in DefaultUmpleSource: " +  master.getParentFile().getPath())
-        umple.srcDir master.getParentFile() 
+        println("Updating srcDir in DefaultUmpleSource: ${master.parentFile.path}")
+        umple.srcDir master.parentFile
     }
 
     @Override
     UmpleSourceSet umple(Closure configureClosure) {
-        println("processing the umple{} closure from the build file")      
-        configure(configureClosure, umple)
+        println("processing the umple{} closure from the build file")
+        configure(configureClosure, this)
         this
     }
 

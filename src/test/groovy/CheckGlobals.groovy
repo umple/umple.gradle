@@ -5,6 +5,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
+import java.nio.file.Paths
+
 import static junit.framework.Assert.assertEquals
 import static org.junit.Assert.assertTrue
 /**
@@ -29,10 +31,12 @@ class CheckGlobals {
         buildFile << """
             // Add required plugins and source sets to the sub projects
             plugins { id "umple.gradle.plugin" } // Note must use this syntax
-            
+
+            // Override defaults
             umple {
               language = 'Php'
               master = file('tt-master.ump')
+              outputDir = file('src/wat/\${language}')
             }
             
             task checkUmple {
@@ -40,6 +44,7 @@ class CheckGlobals {
                     Properties props = new Properties()
                     props.put('umple.language', umple.language.toString())
                     props.put('umple.master', umple.master.toString())
+                    props.put('umple.outputDir', umple.outputDir.toString())
                     
                     println '${PROP_START}'
                     props.store(System.out, null)
@@ -59,7 +64,10 @@ class CheckGlobals {
 
         // TODO test not as a string..
         assertEquals("invalid generator", [UmpleLanguage.PHP].toString(), props.get("umple.language").toString())
-        assertTrue("invalid file path", ((String)props.get("umple.master")).endsWith("tt-master.ump]"))
+        assertTrue("invalid file path", (props.get("umple.master").toString()).endsWith("tt-master.ump]"))
+        assertEquals("invalid outputDir",
+                Paths.get(testProjectDir.root.toString(), "src/wat/\${language}"),
+                Paths.get((String)props.get("umple.outputDir")))
     }
 
     private static final PROP_START = 'PROPERTIES_START'

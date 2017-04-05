@@ -10,13 +10,13 @@ import static com.google.common.base.Preconditions.checkNotNull
  */
 class DefaultUmpleOptions implements UmpleOptions {
 
-    def List<UmpleLanguage> language
-    def List<File> master
-    def File outputDir // we can't use the name output. It's reserved by the java plugin
+    private List<UmpleLanguage> language
+    private List<File> master
+    private File outputDir // we can't use the name output. It's reserved by the java plugin
 
     DefaultUmpleOptions() {
-        language = null
-        master = null
+        language = []
+        master = []
         outputDir = null
     }
 
@@ -26,14 +26,13 @@ class DefaultUmpleOptions implements UmpleOptions {
     }
 
     @Override
-    void setMaster(File master) {
-        println("Setting user value for master in DefaultUmpleOptions: " + master)
-        this.master = [checkNotNull(master, "master == null")]
+    void setLanguage(List<UmpleLanguage> languages) {
+        this.language = checkNotNull(languages, "languages == null")
     }
 
     @Override
-    void setLanguage(List<UmpleLanguage> languages) {
-        this.language = checkNotNull(languages, "languages == null")
+    List<UmpleLanguage> getLanguage() {
+        this.language
     }
 
     @Override
@@ -42,8 +41,24 @@ class DefaultUmpleOptions implements UmpleOptions {
     }
 
     @Override
+    void setMaster(File master) {
+        println("Setting user value for master in DefaultUmpleOptions: " + master)
+        this.master = [checkNotNull(master, "master == null")]
+    }
+
+    @Override
+    List<File> getMaster() {
+        this.master
+    }
+
+    @Override
     void setOutputDir(File output) {
         this.outputDir = checkNotNull(output, "output == null")
+    }
+
+    @Override
+    File getOutputDir() {
+        this.outputDir
     }
 
     @Override

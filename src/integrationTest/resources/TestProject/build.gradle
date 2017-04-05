@@ -9,7 +9,8 @@ buildscript {
     classpath files('libs/umple-latest.jar')
     // Use the locally built version of the plugin for the tests
     classpath files('libs/UmpleGradlePlugin-0.1.3.jar')
-    classpath group: 'com.google.guava', name: 'guava', version: '19.0' //TODO does the user really need to include this?
+    classpath group: 'com.google.guava', name: 'guava', version: '21.0'
+
   }
 }
 
@@ -27,15 +28,11 @@ subprojects {
       umple {
         language = 'Java'
         master = file('src/customPath/umple/master.ump')
-        // output = { -> file('customPath/generated/\${language}') }
-        outputDir = file('customPath/generated/java')
+        System.err.println("wat")
+        outputDir = file('customPath/generated/\${language}')
       }
-      java.srcDir file('customPath/generated/java') // Configure where the compileJava tasks should read and write to/from
-      output.classesDir 'build/classes/generatedSource'
     }
   }
-
-compileJava.dependsOn('compileUmple')
 }
 
 compileJava.dependsOn(':subproj:compileJava', ':sub2:compileJava')

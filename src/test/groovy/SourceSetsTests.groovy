@@ -5,6 +5,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
+import java.nio.file.Paths
+
 import static junit.framework.Assert.assertEquals
 import static org.junit.Assert.assertTrue
 /**
@@ -33,6 +35,7 @@ class SourceSetsTests {
             sourceSets {
                 main {
                     umple {
+                        language = 'Ruby'
                         master = file('other.ump')
                     }
                 }
@@ -42,6 +45,7 @@ class SourceSetsTests {
             umple {
               language = 'Php'
               master = file('master.ump')
+              outputDir = file('src/generated/\${language}')
             }
             
             task checkUmple {
@@ -49,6 +53,7 @@ class SourceSetsTests {
                     Properties props = new Properties()
                     props.put('umple.language', umple.language.toString())
                     props.put('umple.master', umple.master.get(0).getName())
+                    props.put('umple.outputDir', umple.outputDir.toString())
                     
                     println '${PROP_START}'
                     props.store(System.out, null)
@@ -67,6 +72,9 @@ class SourceSetsTests {
         Properties props = getProperties(result.output)
 
         assertEquals("invalid generator", [UmpleLanguage.PHP].toString(), props.get("umple.language").toString())
+        assertEquals("invalid outputDir",
+                Paths.get(testProjectDir.root.toString(), "src/generated/\${language}"),
+                Paths.get((String)props.get("umple.outputDir")))
         // TODO this fails because we don't update master using the value from the umple closure within the main source set 
 		// unless we run the UmpleGenerateTask
         //assertTrue("invalid file path: " + (String)props.get("umple.master"), ((String)props.get("umple.master")).equals("other.ump")) 

@@ -5,6 +5,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Before
 import org.junit.Test
 
+import static junit.framework.Assert.assertEquals
 import static junit.framework.Assert.assertNull
 import static org.junit.Assert.assertTrue
 
@@ -27,8 +28,8 @@ class Basic {
 
         UmpleOptions config = testProject.umple
 
-        assertNull("language", config.language)
-        assertNull("master", config.master)
+        assertEquals("language", [], config.language)
+        assertEquals("master", [], config.master)
         assertNull("output", config.outputDir)
     }
 

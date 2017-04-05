@@ -92,20 +92,18 @@ class UmpleGradlePlugin implements Plugin<Project> {
         // a configuration per source set
 
         // Try to find the task, see if it exists
-        UmpleGenerateTask umpleGenerate = (UmpleGenerateTask) project.tasks.findByName(taskName)
+        println("Adding generate task: ${umpleSourceSet}")
+        UmpleGenerateTask umpleGenerate = project.tasks.create(taskName, UmpleGenerateTask.class)
 
-        // If it doesn't exist, we have to create the task and initialize it properly
-        if (!umpleGenerate) {
-            println("Adding generate task")
-            umpleGenerate = project.tasks.create(taskName, UmpleGenerateTask.class)
+        umpleGenerate.description = "Compiles the " + sourceSet + "."
+        umpleGenerate.setSourceSet(sourceSet) // the source set must be configured when UmpleGenerateTask is run so that compileSourceSetJava works properly
+        umpleGenerate.source = umpleSourceSet.umple //source directory for the compileUmple task is the SourceDirectorySet in DefaultUmpleSourceSet
+        umpleGenerate.compileConfig = umpleSourceSet // Now we add a configuration to the task
 
-            umpleGenerate.description = "Compiles the " + sourceSet + "."
-            umpleGenerate.setSourceSet(sourceSet) // the source set must be configured when UmpleGenerateTask is run so that compileSourceSetJava works properly
-            umpleGenerate.source = umpleSourceSet.umple //source directory for the compileUmple task is the SourceDirectorySet in DefaultUmpleSourceSet
-            project.tasks.getByName(sourceSet.classesTaskName).dependsOn taskName
+        if (umpleGenerate.compileConfig.language.contains(UmpleLanguage.JAVA)) {
+            // TODO Add flag to turn this on/off
+            project.tasks.getByName(sourceSet.compileJavaTaskName).dependsOn umpleGenerate
         }
 
-        // Now we add a configuration to the task
-        umpleGenerate.compileConfigs.add(umpleSourceSet)
     }
 }
