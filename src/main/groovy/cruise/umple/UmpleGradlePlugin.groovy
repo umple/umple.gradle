@@ -114,8 +114,8 @@ class UmpleGradlePlugin implements Plugin<Project> {
             } else {
                 out.master = umpleSourceSet.master
             }
-    
-            if (!umpleSourceSet.outputDir) {    
+
+            if (umpleSourceSet.outputDir == null) {    
                 if (!globals.outputDir)
                     out.outputDir = globals.DEFAULT_GENERATED_OUTPUT
                 else
@@ -123,22 +123,22 @@ class UmpleGradlePlugin implements Plugin<Project> {
             } else {
                 out.outputDir = umpleSourceSet.outputDir
             }
-            
-            if (!umpleSourceSet.dependsFlag) {    
-                if (!globals.dependsFlag)
-                    out.dependsFlag = globals.DEFAULT_DEPENDS_FLAG
+
+            if (umpleSourceSet.compileGenerated == null) {    
+                if (!globals.compileGenerated)
+                    out.compileGenerated = globals.DEFAULT_COMPILE_GENERATED_FLAG
                 else
-                    out.dependsFlag = globals.dependsFlag
+                    out.compileGenerated = globals.compileGenerated
             } else {
-                out.dependsFlag = umpleSourceSet.dependsFlag
+                out.compileGenerated = umpleSourceSet.compileGenerated
             }
-            
-	        if (out.language.contains(UmpleLanguage.JAVA) && out.dependsFlag) 
-	        {      
-	            project.tasks.getByName(sourceSet.compileJavaTaskName).dependsOn umpleGenerate	            
-	            sourceSet.java.srcDir out.outputDir.toString()
-	            
-	        }
+
+            if (out.language.contains(UmpleLanguage.JAVA) && out.compileGenerated) 
+            {      
+                project.tasks.getByName(sourceSet.compileJavaTaskName).dependsOn umpleGenerate
+                // overwrite the existing Java srcDirs. We want Gradle to only look at the folder that contains the output of the compileUmple task            
+                sourceSet.java.srcDirs = [out.outputDir.toString()] 	            
+            }
            
             umpleGenerate.setCompileConfig(out)
             //println (out)

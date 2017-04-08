@@ -14,13 +14,16 @@ class DefaultUmpleOptions implements UmpleOptions {
     private List<UmpleLanguage> language
     private List<File> master
     private File outputDir // we can't use the name output. It's reserved by the java plugin
-    private Boolean dependsFlag // tells us whether or not to set the compileJava task to depend on the compileUmple task
+    private Boolean compileGenerated // tells us whether or not to set the compileJava task to depend on the compileUmple task
 
     DefaultUmpleOptions() {
         language = []
         master = []
         outputDir = null
-        dependsFlag = null
+        // null means no configuration has been provided by the user. We use the check `compileGenerated == null` in UmpleGradlePlugin
+        // to determine if we need to check for global defaults or use our hardcoded defaults. We must use a Boolean here (as opposed to a boolean)
+        // so we can set the initial value to null
+        compileGenerated = null 
     }
 
     @Override
@@ -73,13 +76,13 @@ class DefaultUmpleOptions implements UmpleOptions {
     }
     
     @Override
-    void setDependsFlag(boolean val) {
-        this.dependsFlag = val
+    void setCompileGenerated(boolean val) {
+        this.compileGenerated = val
     }
 
     @Override
-    boolean getDependsFlag() {
-        this.dependsFlag
+    Boolean getCompileGenerated() {
+        this.compileGenerated
     }
     
     @Override
@@ -93,7 +96,7 @@ class DefaultUmpleOptions implements UmpleOptions {
                 .add("language", language)
                 .add("master", master)
                 .add("output", outputDir)
-                .add("dependsFlag", dependsFlag)
+                .add("compileGenerated", compileGenerated)
                 .toString()
     }
 }
