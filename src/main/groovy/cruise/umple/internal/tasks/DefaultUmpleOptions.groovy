@@ -14,11 +14,13 @@ class DefaultUmpleOptions implements UmpleOptions {
     private List<UmpleLanguage> language
     private List<File> master
     private File outputDir // we can't use the name output. It's reserved by the java plugin
+    private Boolean dependsFlag // tells us whether or not to set the compileJava task to depend on the compileUmple task
 
     DefaultUmpleOptions() {
         language = []
         master = []
         outputDir = null
+        dependsFlag = null
     }
 
     @Override
@@ -60,7 +62,17 @@ class DefaultUmpleOptions implements UmpleOptions {
     File getOutputDir() {
         this.outputDir
     }
+    
+    @Override
+    void setDependsFlag(boolean val) {
+        this.dependsFlag = checkNotNull(val, "val == null")
+    }
 
+    @Override
+    boolean getDependsFlag() {
+        this.dependsFlag
+    }
+    
     @Override
     File resolveOutputDir(UmpleLanguage language) {
         UmpleOptionsUtils.getOutputDir(outputDir, language)
@@ -72,6 +84,7 @@ class DefaultUmpleOptions implements UmpleOptions {
                 .add("language", language)
                 .add("master", master)
                 .add("output", outputDir)
+                .add("dependsFlag", dependsFlag)
                 .toString()
     }
 }

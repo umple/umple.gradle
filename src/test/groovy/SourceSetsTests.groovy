@@ -74,9 +74,7 @@ class SourceSetsTests {
         assertEquals("invalid outputDir",
                 Paths.get(testProjectDir.root.toString(), "src/generated/\${language}"),
                 Paths.get((String)props.get("umple.outputDir")))
-        // TODO this fails because we don't update master using the value from the umple closure within the main source set 
-		// unless we run the UmpleGenerateTask
-        //assertTrue("invalid file path: " + (String)props.get("umple.master"), ((String)props.get("umple.master")).equals("other.ump")) 
+        assertTrue("invalid file path: " + (String)props.get("umple.master"), ((String)props.get("umple.master")).equals("other.ump")) 
     }
 
 }

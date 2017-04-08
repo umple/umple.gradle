@@ -28,21 +28,21 @@ class DefaultUmpleSourceSet extends DefaultUmpleOptions implements UmpleSourceSe
     @Override //TODO refactor. When we set a new master file we must update srcDir to make sure incremental bulds work properly
     void setMaster(File master) {
         this.master = [checkNotNull(master, "master == null")]
-        println("Updating srcDir in DefaultUmpleSource: ${master.parentFile.path}")
         umple.srcDir master.parentFile
+    }
+    
+    @Override //TODO add tests for builds where we specify multiple master file and/or multiple languages
+    void setMaster(List<File> masters) {
+        for (File master : masters) 
+        {
+            this.master = [checkNotNull(master, "master == null")]
+            umple.srcDir master.parentFile
+        }
     }
 
     @Override
     UmpleSourceSet umple(Closure configureClosure) {
-        println("processing the umple{} closure from the build file")
         configure(configureClosure, this)
-        this
-    }
-
-    @Override //TODO delete this? Never used?
-    UmpleSourceSet umple(Action<? extends UmpleOptions> configureAction) {
-        println("processing the umple{} closure from umple(Action<UmpleOptions> configureAction)")
-        configureAction.execute(this)
         this
     }
 }

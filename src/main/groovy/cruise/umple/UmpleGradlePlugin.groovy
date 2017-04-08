@@ -20,8 +20,6 @@ import javax.inject.Inject
 class UmpleGradlePlugin implements Plugin<Project> {
 
     static final String UMPLE_CONFIGURATION_NAME = "umple"
-
-    // Used to create sourceDirectorySets
     private final SourceDirectorySetFactory sourceDirectorySetFactory;
 
     @Inject
@@ -31,7 +29,6 @@ class UmpleGradlePlugin implements Plugin<Project> {
 
     @Override
     void apply(final Project project) {
-        //println("Inside apply")
         // We use sourceSets because it's convenient
         project.getPluginManager().apply(JavaBasePlugin)
 
@@ -45,12 +42,10 @@ class UmpleGradlePlugin implements Plugin<Project> {
         umpleConfig.defaultDependencies {
             dependencies.add(project.dependencies.create('libs/umple-latest.jar'))
         }
-		//TODO change bb2 back to sourceSet once we figure out the sourceSet proeprty problem
+
         // So now we have to go through and add the properties that we want
         project.getConvention().getPlugin(JavaPluginConvention.class).getSourceSets().all { sourceSet ->
             // For each sourceSet we're enacting an action on each one that adds an umple task to it
-
-            // an Action is something like doLast. Usually associated with a Task. Maybe here we're just doing something (an Action) to each bb2?     
 
             // Get the convention and add the properties
             Convention sourceSetConvention = (Convention) InvokerHelper.getProperty(sourceSet, "convention")
@@ -71,8 +66,6 @@ class UmpleGradlePlugin implements Plugin<Project> {
             // Add the source to all of the required sources
             sourceSet.allSource.source umpleDirectorySet
 
-            //println "Sources : " +bb2.allSource.files // we've correctly added the .ump files for the main SS at this point
-
             // ignore the sources in the resources folder
             sourceSet.resources.filter.exclude { element -> umpleDirectorySet.contains element.file }
 
@@ -84,28 +77,75 @@ class UmpleGradlePlugin implements Plugin<Project> {
     // Configures the "compileUmple*" tasks to build the umple files
     private static void addAndConfigureUmpleGenerate(final Project project,
                                                      final SourceSet sourceSet,
-                                                     final UmpleSourceSet umpleSourceSet) {
+                                                     final DefaultUmpleSourceSet umpleSourceSet) {
         String taskName = sourceSet.getCompileTaskName("umple")
-        println("configuring task: " + taskName)
 
         // When we get a new sourceSet, per [sub-]project, we create a "compileUmpleTask" that consists of building
         // a configuration per source set
 
         // Try to find the task, see if it exists
-        println("Adding generate task: ${umpleSourceSet}")
         UmpleGenerateTask umpleGenerate = project.tasks.create(taskName, UmpleGenerateTask.class)
 
         umpleGenerate.description = "Compiles the " + sourceSet + "."
         umpleGenerate.source = umpleSourceSet.umple //source directory for the compileUmple task is the SourceDirectorySet in DefaultUmpleSourceSet
         umpleGenerate.compileConfig = umpleSourceSet // Now we add a configuration to the task
 
+        //TODO refactor this into a seperate method
+         project.afterEvaluate { // we execute everything in the close *after* the configuration phase is complete
+                // get defaults user specified within the non-source set umple closure
+            DefaultUmpleOptions globals = (DefaultUmpleOptions)(project.extensions.getByName("umple"))
+    
+            // make a defensive copy so we don't change the underlying stored reference
+            DefaultUmpleOptions out = new DefaultUmpleOptions()
+            if (umpleSourceSet.language.isEmpty()) { // if the use hasn't specified a SourceSet-specific override (e.g. sourceSets{ main{ } })
+                if (!globals.language) // if the user hasn't specified anything configuration values, use our defaults from UmpleOptions
+                    out.language = globals.DEFAULT_LANGUAGE_TO_GENERATE
+                else  // if the user has specified defaults using an umple closure, use them
+                    out.language = globals.language
+            } else {
+                out.language = umpleSourceSet.language
+            }
+    
+            if (umpleSourceSet.master.isEmpty()) {
+                if (!globals.master)
+                    out.master = globals.DEFAULT_MASTER_FILE
+                else
+                    out.master = globals.master
+            } else {
+                out.master = umpleSourceSet.master
+            }
+    
+            if (!umpleSourceSet.outputDir) {    
+                if (!globals.outputDir)
+                    out.outputDir = globals.DEFAULT_GENERATED_OUTPUT
+                else
+                    out.outputDir = globals.outputDir
+            } else {
+                out.outputDir = umpleSourceSet.outputDir
+            }
+            
+            if (!umpleSourceSet.dependsFlag) {    
+                if (!globals.dependsFlag)
+                    out.dependsFlag = globals.DEFAULT_DEPENDS_FLAG
+                else
+                    out.dependsFlag = globals.dependsFlag
+            } else {
+                out.dependsFlag = umpleSourceSet.dependsFlag
+            }
+            
+	        if (out.language.contains(UmpleLanguage.JAVA) && out.dependsFlag) 
+	        {      
+	            project.tasks.getByName(sourceSet.compileJavaTaskName).dependsOn umpleGenerate	            
+	            sourceSet.java.srcDir out.outputDir.toString()
+	            
+	        }
+           
+            umpleGenerate.setCompileConfig(out)
+            //println (out)
+        }
+
         // TODO Should this be static here? It feels very wrong.
         umpleGenerate.sourceRoot = project.projectDir.toPath().resolve("src/${sourceSet.name}/umple").toFile()
-
-        if (umpleGenerate.compileConfig.language.contains(UmpleLanguage.JAVA)) {
-            // TODO Add flag to turn this on/off
-            project.tasks.getByName(sourceSet.compileJavaTaskName).dependsOn umpleGenerate
-        }
 
         project.tasks.getByName("build").dependsOn umpleGenerate
 

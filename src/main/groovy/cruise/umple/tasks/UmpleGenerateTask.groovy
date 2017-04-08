@@ -24,47 +24,6 @@ class UmpleGenerateTask extends SourceTask {
         compileConfig = (DefaultUmpleOptions)(project.extensions.getByName(UmpleOptions.NAME))
     }
 
-
-    UmpleOptions getCompileConfig() {
-
-        // get defaults user specified within the non-source set umple closure
-        DefaultUmpleOptions globals = (DefaultUmpleOptions)(project.extensions.getByName(UmpleOptions.NAME))
-        println("Setting configuration for UmpleGenerateTask: Extension for project: ${project} here's the umple options ${project.umple}")
-
-        // make a defensive copy so we don't change the underlying stored reference
-        UmpleOptions out = new DefaultUmpleOptions()
-
-        if (!compileConfig.language) { // if the use hasn't specified a SourceSet-specific override (e.g. sourceSets{ main{ } })
-            if (!globals.language) // if the user hasn't specified anything configuration values, use our defaults from UmpleOptions
-                out.language = globals.DEFAULT_LANGUAGE_TO_GENERATE
-            else  // if the user has specified defaults using an umple closure, use them
-                out.language = globals.language
-        } else {
-            out.language = compileConfig.language
-        }
-
-        if (!compileConfig.master) {
-            if (!globals.master)
-                out.master = globals.DEFAULT_MASTER_FILE
-            else
-                out.master = globals.master
-        } else {
-            out.master = compileConfig.master
-        }
-
-        if (!compileConfig.outputDir) {
-
-            if (!globals.outputDir)
-                out.outputDir = globals.DEFAULT_GENERATED_OUTPUT
-            else
-                out.outputDir = globals.outputDir
-        } else {
-            out.outputDir = compileConfig.outputDir
-        }
-
-        out
-    }
-
     // updates the umple generate task's configuration. If any configuration values have been specified by the user, we use those. Otherwise we use the
     // defaults from UmptionOptions
     @Input
@@ -76,12 +35,8 @@ class UmpleGenerateTask extends SourceTask {
 
     @TaskAction
     void execute(IncrementalTaskInputs inputs) {
-
-        UmpleOptions opts = getCompileConfig()
-//        println("languages = " + opts.language)
-//        println("master files = " + opts.master)
-//        println("output path = " + opts.outputDir)
-
+        UmpleOptions opts = compileConfig
+        //println(opts)
 
         // The user specifies paths relative to the main project directory, but
         // to umple requires paths relative to CWD /or/ absolute paths, absolute

@@ -11,6 +11,7 @@ interface UmpleOptions {
     public static final List<UmpleLanguage> DEFAULT_LANGUAGE_TO_GENERATE = [UmpleLanguage.JAVA]
     public static final List<File> DEFAULT_MASTER_FILE = [new File("Master.ump")]
     public static final File DEFAULT_GENERATED_OUTPUT = new File("generated/")
+    public static final boolean DEFAULT_DEPENDS_FLAG = false
 
     public static final LANGUAGE_TAG = "\\\$\\{language\\}"
 
@@ -24,6 +25,9 @@ interface UmpleOptions {
 
     File getOutputDir()
     void setOutputDir(File f)
+
+    boolean getDependsFlag()
+    void setDependsFlag(boolean f)
 
     /**
      * Gets the output directory relative to the current state

@@ -22,12 +22,4 @@ interface UmpleSourceSet extends UmpleOptions {
      * @return Umple source, never {@code null}
      */
     UmpleSourceSet umple(Closure configureClosure)
-
-    /**
-     * Returns the source that will be compiled by Umple and configures using the closure
-     * @param configureAction action for configuration
-     *
-     * @return Umple source, never {@code null}
-     */
-    UmpleSourceSet umple(Action<? extends UmpleOptions> configureAction)
 }
