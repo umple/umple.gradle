@@ -27,15 +27,15 @@ class DefaultUmpleSourceSet extends DefaultUmpleOptions implements UmpleSourceSe
     
     @Override //TODO refactor. When we set a new master file we must update srcDir to make sure incremental bulds work properly
     void setMaster(File master) {
-        this.master = [checkNotNull(master, "master == null")]
-        umple.srcDir master.parentFile
+        this.master = [master] // null check etc in setMaster(List<File> masters)
     }
     
     @Override //TODO add tests for builds where we specify multiple master file and/or multiple languages
     void setMaster(List<File> masters) {
+        this.master.clear()
         for (File master : masters) 
         {
-            this.master = [checkNotNull(master, "master == null")]
+            this.master.add(checkNotNull(master, "master == null"))
             umple.srcDir master.parentFile
         }
     }

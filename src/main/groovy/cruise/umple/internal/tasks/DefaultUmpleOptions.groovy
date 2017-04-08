@@ -25,12 +25,16 @@ class DefaultUmpleOptions implements UmpleOptions {
 
     @Override
     void setLanguage(UmpleLanguage language) {
-        this.language = [checkNotNull(language, "language == null")]
+        this.language = [language] // null check etc in setLanguage(List<UmpleLanguage> languages)
     }
 
     @Override
     void setLanguage(List<UmpleLanguage> languages) {
-        this.language = checkNotNull(languages, "languages == null")
+        this.language.clear()
+        for (UmpleLanguage language : languages) 
+        {
+            this.language.add(checkNotNull(language, "language == null"))
+        }
     }
 
     @Override
@@ -39,14 +43,19 @@ class DefaultUmpleOptions implements UmpleOptions {
     }
 
     @Override
+    void setMaster(File master) {
+        this.master = [master] // null check etc in setMaster(List<File> masters)
+    }
+    
+    @Override
     void setMaster(List<File> masters) {
-        this.master = checkNotNull(masters, "masters == null")
+        this.master.clear()
+        for (File master : masters) 
+        {
+            this.master.add(checkNotNull(master, "master == null"))
+        }
     }
 
-    @Override
-    void setMaster(File master) {
-        this.master = [checkNotNull(master, "master == null")]
-    }
 
     @Override
     List<File> getMaster() {
@@ -65,7 +74,7 @@ class DefaultUmpleOptions implements UmpleOptions {
     
     @Override
     void setDependsFlag(boolean val) {
-        this.dependsFlag = checkNotNull(val, "val == null")
+        this.dependsFlag = val
     }
 
     @Override

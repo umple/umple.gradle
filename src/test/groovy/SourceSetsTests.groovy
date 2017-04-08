@@ -8,8 +8,11 @@ import org.junit.rules.TemporaryFolder
 import java.nio.file.Paths
 
 import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
 /**
- * Checks the behaviour of overriding globals in a project
+ * Checks the behaviour of overriding globals in a project. 
+ * This test also checks that the contents of the default umple closure
+ * aren't affected by specifying SourceSet specific configuration.
  */
 class SourceSetsTests {
 
@@ -74,7 +77,7 @@ class SourceSetsTests {
         assertEquals("invalid outputDir",
                 Paths.get(testProjectDir.root.toString(), "src/generated/\${language}"),
                 Paths.get((String)props.get("umple.outputDir")))
-        assertTrue("invalid file path: " + (String)props.get("umple.master"), ((String)props.get("umple.master")).equals("other.ump")) 
+        assertTrue("invalid file path: " + (String)props.get("umple.master"), ((String)props.get("umple.master")).equals("master.ump")) 
     }
 
 }

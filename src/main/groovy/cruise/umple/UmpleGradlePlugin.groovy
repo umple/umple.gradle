@@ -68,7 +68,6 @@ class UmpleGradlePlugin implements Plugin<Project> {
 
             // ignore the sources in the resources folder
             sourceSet.resources.filter.exclude { element -> umpleDirectorySet.contains element.file }
-
             addAndConfigureUmpleGenerate(project, sourceSet, umpleSourceSet)
 
         }
@@ -91,8 +90,9 @@ class UmpleGradlePlugin implements Plugin<Project> {
         umpleGenerate.compileConfig = umpleSourceSet // Now we add a configuration to the task
 
         //TODO refactor this into a seperate method
-         project.afterEvaluate { // we execute everything in the close *after* the configuration phase is complete
+         project.afterEvaluate { // we execute everything in the closure *after* the configuration phase is complete
                 // get defaults user specified within the non-source set umple closure
+            //println("Configuration complete! Executing the afterEvaluate closure")
             DefaultUmpleOptions globals = (DefaultUmpleOptions)(project.extensions.getByName("umple"))
     
             // make a defensive copy so we don't change the underlying stored reference
