@@ -12,6 +12,7 @@ interface UmpleOptions {
     public static final List<File> DEFAULT_MASTER_FILE = [new File("Master.ump")]
     public static final File DEFAULT_GENERATED_OUTPUT = new File("generated/")
     public static final boolean DEFAULT_COMPILE_GENERATED_FLAG = true
+    public static final boolean DEFAULT_CUSTOM_MASTER_PATH_FLAG = false
 
     public static final LANGUAGE_TAG = "\\\$\\{language\\}"
 
@@ -28,6 +29,9 @@ interface UmpleOptions {
 
     Boolean getCompileGenerated()
     void setCompileGenerated(boolean f)
+    
+    Boolean getCustomMasterPath()
+    void setCustomMasterPath(boolean f)
 
     /**
      * Gets the output directory relative to the current state

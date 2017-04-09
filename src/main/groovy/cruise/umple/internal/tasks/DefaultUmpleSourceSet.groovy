@@ -8,6 +8,7 @@ import org.gradle.api.internal.file.SourceDirectorySetFactory
 
 import static com.google.common.base.Preconditions.checkNotNull
 import static org.gradle.util.ConfigureUtil.configure
+
 /**
  * Default implemenation of {@link UmpleSourceSet}
  */
@@ -25,21 +26,6 @@ class DefaultUmpleSourceSet extends DefaultUmpleOptions implements UmpleSourceSe
         umple
     }
     
-    @Override //TODO refactor. When we set a new master file we must update srcDir to make sure incremental bulds work properly
-    void setMaster(File master) {
-        this.master = [master] // null check etc in setMaster(List<File> masters)
-    }
-    
-    @Override //TODO add tests for builds where we specify multiple master file and/or multiple languages
-    void setMaster(List<File> masters) {
-        this.master.clear()
-        for (File master : masters) 
-        {
-            this.master.add(checkNotNull(master, "master == null"))
-            umple.srcDir master.parentFile
-        }
-    }
-
     @Override
     UmpleSourceSet umple(Closure configureClosure) {
         configure(configureClosure, this)

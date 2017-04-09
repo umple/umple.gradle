@@ -15,7 +15,8 @@ class DefaultUmpleOptions implements UmpleOptions {
     private List<File> master
     private File outputDir // we can't use the name output. It's reserved by the java plugin
     private Boolean compileGenerated // tells us whether or not to set the compileJava task to depend on the compileUmple task
-
+    private Boolean customMasterPath // tells us whether user wants to override src/{source set}/umple structure
+   
     DefaultUmpleOptions() {
         language = []
         master = []
@@ -24,6 +25,7 @@ class DefaultUmpleOptions implements UmpleOptions {
         // to determine if we need to check for global defaults or use our hardcoded defaults. We must use a Boolean here (as opposed to a boolean)
         // so we can set the initial value to null
         compileGenerated = null 
+        customMasterPath = null
     }
 
     @Override
@@ -59,7 +61,6 @@ class DefaultUmpleOptions implements UmpleOptions {
         }
     }
 
-
     @Override
     List<File> getMaster() {
         this.master
@@ -83,6 +84,16 @@ class DefaultUmpleOptions implements UmpleOptions {
     @Override
     Boolean getCompileGenerated() {
         this.compileGenerated
+    }
+    
+    @Override
+    void setCustomMasterPath(boolean val) {
+        this.customMasterPath = val
+    }
+
+    @Override
+    Boolean getCustomMasterPath() {
+        this.customMasterPath
     }
     
     @Override

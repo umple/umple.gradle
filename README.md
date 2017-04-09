@@ -8,6 +8,7 @@
 The plugin has four configuration properties that are used to customize the `compileUmple` task.
   - language: The language(s) you want to compile your Umple files to. You can specify as single language or multiple.
   - master: The name of your master Umple file. The plugin looks for this file in the following location: `{project root directory}/src/{source set name}/umple. Multiple master files may be specified.
+  - customMasterPath: If you want the plugin to look for a master file in a location that doesn't conform to the `{project root directory}/src/{source set name}/umple` convention, set this flag to true and provide a path to the master file starting from the project root directory for the `master` input
   - compileGenerated: A flag that tells the plugin whether or not you want the generated source files to be compiled. Currently, the plugin only supports compiling Java files.
   - outputDir: The location you want the generated source files outputted to. This is relative to your project's root directory. The plugin will automatically look in this 
   location if you tell it to compile the files it generates.
@@ -18,6 +19,7 @@ language = ['Java']
 outputDir = 'generated'
 master = ['Master.ump']
 compileGenerated = true
+customMasterFlag = false
 
 You can also specify global default values that apply to all `SourceSets` involved in your build. Global defaults override the system defaults described above, but will not 
 override any SourceSet specific configuration values you specify. 

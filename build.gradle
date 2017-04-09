@@ -6,7 +6,7 @@ apply plugin: 'idea'
 // Unless overridden in the pluginBundle config DSL, the project version will
 // be used as your plugin version when publishing
 group 'cruise.umple'
-version '0.1.3'
+version '0.2.0'
 sourceCompatibility = '1.8'
 
 repositories {
