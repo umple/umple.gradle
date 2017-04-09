@@ -1,0 +1,1 @@
+You can use this base project to get a better idea of how the Gradle plugin can be applied to your build project. The base project is not complete and so may require a bit of work if you want to use it as a template for your project. However, the included `build.gradle` file and the correctly structured `src` folder are the most important components and are included for you.

@@ -1,0 +1,39 @@
+buildscript {
+  repositories {
+    maven {
+      	url "https://plugins.gradle.org/m2/"
+    }
+    maven {
+        url uri('libs')
+    }
+    mavenCentral()
+  }
+  dependencies {
+    classpath files('libs/umple-latest.jar')
+    //TODO update {CURRENT_VERSION} to the version of the plugin you're using
+    classpath "umple.gradle.plugin:UmpleGradlePlugin-{CURRENT_VERSION}" 
+  }
+}
+
+apply plugin: "umple.gradle.plugin"
+
+/*
+Running the `compileUmple` task will compile the `master.ump` file found at `src/main/umple` into Java source. Running the `compileJava` task 
+will first run the `compileUmple` task, then it will compile the Java files that are produced. Class files will be outputted to `build/classFiles`.
+*/
+
+sourceSets {
+   main {
+       umple{
+           master = file('master.ump')
+           //compileGenerated = false
+       }
+   output.classesDir = "build/classFiles" //changes where compile .class files are outputted
+   }
+}
+	
+umple {
+	 master = file('master_alt.ump')
+	 outputDir = file('src/custom/java')
+}   
+
