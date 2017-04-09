@@ -35,7 +35,7 @@ buildscript {
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.6"
         classpath 'de.undercouch:gradle-download-task:3.2.0'
-        classpath "gradle.plugin.org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.3.2"
+        classpath "gradle.plugin.org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.3.2"       
     }
 }
 
@@ -114,6 +114,8 @@ static getJar(final String pathToJar) {
 }
 
 copyPluginJars.dependsOn('jar')
+
+copyUmpleJar.dependsOn('downloadUmpleJar')
 
 integrationTest.dependsOn('copyUmpleJar', 'copyPluginJars')
 

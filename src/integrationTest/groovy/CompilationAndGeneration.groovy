@@ -46,6 +46,10 @@ public class CompilationAndGeneration {
         for (Map.Entry<String, ArrayList<String>> entry : DIRECTORIES_TO_CHECK.entries()) {
             int fileCount = 0
             File createdFolder = new File(entry.getKey())
+            if (!createdFolder.isDirectory()) {
+                fail(createdFolder.getName() + " could not be opened")
+            }
+            
             for (File file: createdFolder.listFiles()) {   
                 String fileName = file.getName()            
                 if (file.length() == 0) {

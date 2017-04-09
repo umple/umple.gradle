@@ -14,6 +14,7 @@ import org.gradle.api.plugins.Convention
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
+import org.gradle.api.GradleException
 
 import javax.inject.Inject
 
@@ -102,6 +103,7 @@ class UmpleGradlePlugin implements Plugin<Project> {
                     out.language = globals.DEFAULT_LANGUAGE_TO_GENERATE
                 else  // if the user has specified defaults using an umple closure, use them
                     out.language = globals.language
+
             } else {
                 out.language = umpleSourceSet.language
             }
