@@ -24,13 +24,15 @@ class Basic {
     }
 
     @Test
-    void hasDefaultGlobalParams() {
+    void globalConfigInitializedCorrectly() {
 
         UmpleOptions config = testProject.umple
 
         assertEquals("language", [], config.language)
         assertEquals("master", [], config.master)
-        assertNull("output", config.outputDir)
+        assertNull("outputDir", config.outputDir)
+        assertNull("compileGenerated", config.compileGenerated)
+        assertNull("customMasterPath", config.customMasterPath)
     }
 
     // TODO Tests that use the mutators and validate it

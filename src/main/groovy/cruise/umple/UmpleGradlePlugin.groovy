@@ -89,7 +89,6 @@ class UmpleGradlePlugin implements Plugin<Project> {
             // we execute everything in the closure *after* the configuration phase is complete
             //println("Configuration complete! Executing the afterEvaluate closure")
 
-
             // make a defensive copy so we don't change the underlying stored reference
             DefaultUmpleOptions out = new DefaultUmpleOptions()
             
@@ -99,7 +98,6 @@ class UmpleGradlePlugin implements Plugin<Project> {
             umpleGenerate.setCompileConfig(out)
             //println (out)
         }
-
 
         project.tasks.getByName("build").dependsOn umpleGenerate //TODO should this be enabled in all cases?
     }

@@ -7,6 +7,12 @@ class PropertiesUtil {
 
     static final PROP_START = 'PROPERTIES_START'
     static final PROP_END = 'PROPERTIES_END'
+    
+    static final LANGUAGE_KEY = 'umple.language'
+    static final MASTER_KEY = 'umple.master'
+    static final OUT_DIR_KEY = 'umple.outputDir'
+    static final COMPILE_GENERATED_KEY = 'umple.compileGenerated'
+    static final CUSTOM_MASTER_PATH_KEY = 'umple.customMasterPath'
 
     static Properties getProperties(String input) {
         assertTrue('Could not find start of properties in output', input.contains(PROP_START))
