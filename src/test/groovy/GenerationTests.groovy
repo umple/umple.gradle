@@ -23,7 +23,7 @@ class GenerationTests {
     }
 
     @Test
-    void simpleGenerationDefaults() {
+    void simpleGenerationGlobalDefaults() {
 
         buildFile << """
             // Add required plugins and source sets to the sub projects
@@ -35,7 +35,8 @@ class GenerationTests {
             }
             
             umple {
-              language = 'Java'
+              //TODO find out why this gives "No enum constant cruise.umple.UmpleLanguage.Java"
+              //language = Arrays.asList('Java', 'Php', 'Ruby', 'Sql', 'Cxx')
               master = file('master.ump')
               outputDir = file('out/\\\${language}')
             }
@@ -49,6 +50,12 @@ class GenerationTests {
 
         println result.output.toString()
         assertTrue(testProjectDir.root.toPath().resolve("out/java/").toFile().isDirectory())
+       
+       /* assertTrue(testProjectDir.root.toPath().resolve("out/php/").toFile().isDirectory())
+        assertTrue(testProjectDir.root.toPath().resolve("out/ruby/").toFile().isDirectory())
+        assertTrue(testProjectDir.root.toPath().resolve("out/sql/").toFile().isDirectory())
+        assertTrue(testProjectDir.root.toPath().resolve("out/cxx/").toFile().isDirectory())*/
+        //TODO add verifiction for the files in the directory?
     }
 
 }

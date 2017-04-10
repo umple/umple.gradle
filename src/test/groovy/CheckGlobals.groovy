@@ -47,15 +47,17 @@ class CheckGlobals {
             task checkUmple {
                 doLast {
                     Properties props = new Properties()
-                    props.put(${LANGUAGE_KEY}, umple.language.get(0).toString())
-                    props.put(${MASTER_KEY}, umple.master.get(0).toString())
-                    props.put(${OUT_DIR_KEY}, umple.outputDir.toString())
-                    props.put(${COMPILE_GENERATED_KEY}, umple.compileGenerated.toString())
+
+                    props.setProperty('${LANGUAGE_KEY}', umple.language.get(0).toString())
+                    props.setProperty('${MASTER_KEY}', umple.master.get(0).toString())
+                    props.setProperty('${OUT_DIR_KEY}', umple.outputDir.toString())
+                    props.setProperty ('${COMPILE_GENERATED_KEY}', umple.compileGenerated.toString())
+                    props.setProperty ('${CUSTOM_MASTER_PATH_KEY}', umple.customMasterPath.toString())
                     
-                    println '${PropertiesUtil.PROP_START}'
+                    println '${PROP_START}'
                     props.store(System.out, null)
                     println ''
-                    println '${PropertiesUtil.PROP_END}'
+                    println '${PROP_END}'
                 }
             }
         """
@@ -69,13 +71,13 @@ class CheckGlobals {
         Properties props = PropertiesUtil.getProperties(result.output)
 
         // TODO test not as a string..
-        assertEquals("invalid generator", UmpleLanguage.PHP.toString(), props.get(${LANGUAGE_KEY}).toString())
-        assertTrue("invalid file path", (props.get(${MASTER_KEY}).toString()).endsWith("tt-master.ump]"))
+        assertEquals("invalid generator", UmpleLanguage.PHP.toString(), props.getProperty("${LANGUAGE_KEY}"))
+        assertTrue("invalid file path", (props.getProperty("${MASTER_KEY}")).endsWith("tt-master.ump"))
         assertEquals("invalid outputDir",
                 Paths.get(testProjectDir.root.toString(), "src/wat/\${language}"),
-                Paths.get((props.get(${OUT_DIR_KEY}).toString())))
-        assertEquals("invalid compileGenerated", "false", props.get(${COMPILE_GENERATED_KEY}).toString())
-        assertEquals("invalid customMasterPath", "true", props.get(${CUSTOM_MASTER_PATH_KEY}).toString())
+                Paths.get((props.getProperty("${OUT_DIR_KEY}"))))
+        assertEquals("invalid compileGenerated", "false", props.getProperty("${COMPILE_GENERATED_KEY}"))
+        assertEquals("invalid customMasterPath", "true", props.getProperty("${CUSTOM_MASTER_PATH_KEY}"))
     }
 
 

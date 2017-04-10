@@ -5,12 +5,10 @@ package cruise.umple
  */
 enum UmpleLanguage {
 
-
     JAVA,
     CXX,
     PHP,
-    RUBY;
-
-
+    RUBY,
+    SQL;
 
 }

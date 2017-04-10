@@ -11,7 +11,7 @@ class PropertiesUtil {
     static final LANGUAGE_KEY = 'umple.language'
     static final MASTER_KEY = 'umple.master'
     static final OUT_DIR_KEY = 'umple.outputDir'
-    static final COMPILE_GENERATED_KEY = 'umple.compileGenerated'
+    static final COMPILE_GENERATED_KEY = 'umple.compileGenerated' 
     static final CUSTOM_MASTER_PATH_KEY = 'umple.customMasterPath'
 
     static Properties getProperties(String input) {
