@@ -57,7 +57,6 @@ On the other hand, we've only provided a `language` value for the `generatedPhp`
 
 For a more complete example, see the `Base project` directory in the Gradle plugin's Github repo (https://github.com/umple/umple.gradle)
 
-
 The [Umple Compiler Jar](https://github.com/umple/Umple/releases/latest/) must also be present on your local machine and referenced as a buildscript dependency in the `build.gradle` file of the project that is applying the gradle plugin. You can use the snippet below as a template:
 
 **Buildscript**
