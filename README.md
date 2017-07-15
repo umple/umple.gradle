@@ -6,11 +6,11 @@
 
 **Instructions:**
 The plugin has four configuration properties that are used to customize the `compile{source set name}Umple` task.
-  - language: The language(s) you want to compile your Umple files to. You can specify a single language or multiple languages.
-  - master: The name of your master Umple file. The plugin looks for this file in the following location: `{project root directory}/src/{source set name}/umple. Multiple master files may be specified.
-  - customMasterPath: If you want the plugin to look for a master file in a location that doesn't conform to the `{project root directory}/src/{source set name}/umple` convention, set this flag to true and provide a path to the master file starting from the project root directory of the project that contains the `master` file you want to use
-  - compileGenerated: A flag that tells the plugin whether or not you want the generated source files to be compiled. Currently, the plugin only supports compiling Java files.
-  - outputDir: The location you want the generated source files outputted to. This is relative to your project's root directory. The plugin will automatically look in this 
+  - `language`: The language(s) you want to compile your Umple files to. You can specify a single language or multiple languages.
+  - `master`: The name of your master Umple file. The plugin looks for this file in the following location: `{project root directory}/src/{source set name}/umple. Multiple master files may be specified.
+  - `customMasterPath`: If you want the plugin to look for a master file in a location that doesn't conform to the `{project root directory}/src/{source set name}/umple` convention, set this flag to true and provide a path to the master file starting from the project root directory of the project that contains the `master` file you want to use
+  - `compileGenerated`: A flag that tells the plugin whether or not you want the generated source files to be compiled. Currently, the plugin only supports compiling Java files.
+  - `outputDir`: The location you want the generated source files outputted to. This is relative to your project's root directory. The plugin will automatically look in this 
   location if you tell it to compile generated files.
     
 These values are set in the `build.gradle` file of the project you're applying the plugin to. If any required fields are not set, the plugin will fall back on the following default values:
