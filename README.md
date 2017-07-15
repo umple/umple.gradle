@@ -45,7 +45,8 @@ You'll need to add `classpath `de.undercouch:gradle-download-task:3.1.2'` to you
 
 
 
-***Usage Instructions:***
+***Usage Instructions***
+
 *Tasks:*
   - compile{source set name}Umple
 
