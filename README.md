@@ -12,9 +12,11 @@ The plugin relies on three key configuration values:
 
 These values can be set in the build.gradle file of the project you're applying the plugin to. If any of the fields are not set, the plugin will use the following default values:
 
+```
 umpleFilePath = 'src/umple/master.ump'
 languageToGenerate = 'Java' 
 outputPath = 'generated/java'
+```
 
 To set the plugin properties manually, you attach them to a `SourceSet` called `generatedSource`. You can declare the source set and set the plugin properties by including the following snippet in your project's `build.gradle` file (making sure you modify the provided paths to suit your needs):
 ```
