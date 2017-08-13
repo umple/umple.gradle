@@ -45,7 +45,7 @@ You'll also need to add `classpath de.undercouch:gradle-download-task:3.1.2` to 
 
 
 
-***Plugin Usage Instructions***
+***Using the Plugin***
 
 *Tasks:*
   - `compile{source set name}Umple`
