@@ -1,4 +1,4 @@
-# umple.gradle.plugin
+ # umple.gradle.plugin
 
 ***Environment Setup***
 
@@ -22,7 +22,7 @@ buildscript {
 apply plugin: 'umple.gradle.plugin'
 ```
 
-Here, the `libs` folder is relative to your project's root folder (i.e. the folder that contains your project's `build.gradle` file). You should double-check that `0.1.3` is the latest version of the plugin. If it's not, please update this readme!
+Here, the `libs` folder is relative to your project's root folder (i.e. the folder that contains your project's `build.gradle` file). You should double-check that `0.1.3` is the latest version of the plugin. If it's not, please get the latest version and update this readme!
 
 To keep the Umple Jar up-to-date automatically through Gradle, I recommend the `download` plugin. Once the plugin has been applied in your `build.gradle` file, you can add a `downloadUmpleJar` task that will automatically download newer versions of the jar as they're released. We make the download task `dependOn` `generateSource` so that it runs every time the main Umple tasks run:
 ```
