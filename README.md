@@ -24,7 +24,7 @@ apply plugin: 'umple.gradle.plugin'
 
 Here, the `libs` folder is relative to your project's root folder (i.e. the folder that contains your project's `build.gradle` file). You should double-check that `0.1.3` is the latest version of the plugin. If it's not, please get the latest version and update this readme!
 
-To keep the Umple Jar up-to-date automatically through Gradle, I recommend the `download` plugin. Once the plugin has been applied in your `build.gradle` file, you can add a `downloadUmpleJar` task that will automatically download newer versions of the jar as they're released. We make the download task `dependOn` `generateSource` so that it runs every time the main Umple tasks run:
+To keep the Umple Jar up-to-date automatically through Gradle, we recommend the `download` plugin. Once the plugin has been applied in your `build.gradle` file, you can add a `downloadUmpleJar` task that will automatically download newer versions of the jar as they're released. We make the download task `dependOn` `generateSource` so that it runs every time the main Umple tasks run:
 ```
 apply plugin: 'de.undercouch.download'
 
@@ -41,11 +41,11 @@ task downloadUmpleJar(type: de.undercouch.gradle.tasks.download.Download) {
 
 generateSource.dependsOn('downloadUmpleJar')
 ```
-You'll need to add `classpath `de.undercouch:gradle-download-task:3.1.2'` to your `buildscript` dependencies closure if you want to use the download task.
+You'll need to add `classpath de.undercouch:gradle-download-task:3.1.2` to your `buildscript` dependencies closure if you want to use the download task.
 
 
 
-***Usage Instructions***
+***Plugin Usage Instructions***
 
 *Tasks:*
   - compile{source set name}Umple
