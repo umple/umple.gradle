@@ -75,9 +75,9 @@ project.integrationTest {
   Integration tests are run before the check task. Check is run as part of the build task, 
   making the check test depend on integrationTest ensures integration tests are part of the build task.
 */
-//check.dependsOn integrationTest
+check.dependsOn integrationTest
 // Run unit tests before integration tests
-//integrationTest.mustRunAfter test
+integrationTest.mustRunAfter test
 
 // Copy the umple jar into a location that the TestProject used in the integration tests can access
 task copyUmpleJar(type: Copy) {

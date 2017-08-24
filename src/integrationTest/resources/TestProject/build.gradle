@@ -8,7 +8,7 @@ buildscript {
   dependencies {
     classpath files('libs/umple-latest.jar')
     // Use the locally built version of the plugin for the tests
-    classpath files('libs/UmpleGradlePlugin-0.1.3.jar')
+    classpath files('libs/umple.gradle-0.2.0.jar')
     classpath group: 'com.google.guava', name: 'guava', version: '21.0'
 
   }
@@ -21,18 +21,23 @@ apply plugin: 'java'
 subprojects {
   apply plugin: "umple.gradle.plugin"
   apply plugin: "java"
-  
+
+// TODO this should not be neccesary. Find out why compileUmple is returning "UP-TO-DATE" when the output files have been deleted. 
+compileUmple {
+  outputs.upToDateWhen { false }
+}
+
   // Attach the plugin properties to the generatedSource source set
   sourceSets {
     main {
       umple {
-        language = 'Java'
+        language = 'java'
         master = file('src/customPath/umple/master.ump')
-        System.err.println("wat")
-        outputDir = file('customPath/generated/\${language}')
+        outputDir = file('customPath/generated/java')
+		    customMasterPath = true
       }
     }
   }
 }
 
-compileJava.dependsOn(':subproj:compileJava', ':sub2:compileJava')
+compileJava.dependsOn(':subproj:compileUmple', ':sub2:compileUmple')

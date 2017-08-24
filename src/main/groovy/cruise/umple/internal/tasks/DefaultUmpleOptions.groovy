@@ -108,6 +108,7 @@ class DefaultUmpleOptions implements UmpleOptions {
                 .add("master", master)
                 .add("output", outputDir)
                 .add("compileGenerated", compileGenerated)
+                .add("customMasterPath", customMasterPath)
                 .toString()
     }
 }

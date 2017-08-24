@@ -14,7 +14,6 @@ import static com.google.common.base.Preconditions.checkNotNull
  * Created by kevin on 15/03/2017.
  */
 class UmpleGenerateTask extends SourceTask {
-
     private UmpleOptions compileConfig //this contains the DefaultUmpleOption we create within the apply method in UmpleGradlePlugin
 
     UmpleGenerateTask() {

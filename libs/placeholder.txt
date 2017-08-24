@@ -1,0 +1,1 @@
+Put the umple jar in this folder. It should be named umple-latest.jar.

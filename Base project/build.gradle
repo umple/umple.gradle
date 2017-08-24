@@ -12,6 +12,7 @@ buildscript {
     classpath files('libs/umple-latest.jar')
     //TODO update {CURRENT_VERSION} to the version of the plugin you're using
     classpath "umple.gradle.plugin:UmpleGradlePlugin-{CURRENT_VERSION}" 
+    classpath group: 'com.google.guava', name: 'guava', version: '21.0'
   }
 }
 
