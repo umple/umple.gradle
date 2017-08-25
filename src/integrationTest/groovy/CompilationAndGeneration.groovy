@@ -24,7 +24,7 @@ public class CompilationAndGeneration {
     }
 
     private static final PATH_TO_TEST_PROJECT = "src/integrationTest/resources/TestProject"
-    private static final TEST_PROJECT_TASK = "compileJava"
+    private static final TEST_PROJECT_TASK = "compileUmple"
 
     @Before
     // Generates Java from master.ump and compiles the result

@@ -84,8 +84,7 @@ task copyUmpleJar(type: Copy) {
     File umpleJar = getJar("${project.projectDir}/libs/umple-latest.jar")
    
     from umpleJar
-    into "${project.projectDir}/src/integrationTest/resources/TestProject/libs"
-    
+    into "${project.projectDir}/src/integrationTest/resources/TestProject/libs"  
 }
 
 /*

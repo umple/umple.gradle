@@ -10,7 +10,6 @@ buildscript {
     // Use the locally built version of the plugin for the tests
     classpath files('libs/umple.gradle-0.2.0.jar')
     classpath group: 'com.google.guava', name: 'guava', version: '21.0'
-
   }
 }
 
@@ -39,5 +38,3 @@ compileUmple {
     }
   }
 }
-
-compileJava.dependsOn(':subproj:compileUmple', ':sub2:compileUmple')

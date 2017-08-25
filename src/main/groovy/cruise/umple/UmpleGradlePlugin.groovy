@@ -163,7 +163,9 @@ class UmpleGradlePlugin implements Plugin<Project> {
         
         if (out.language.contains(UmpleLanguage.JAVA) && out.compileGenerated) 
         {      
-            project.tasks.getByName(sourceSet.compileJavaTaskName).dependsOn umpleGenerate
+            // The user has requested that generated Java files are compiled. Make sure
+            // the compileJava task runs after the compileUmple task
+            umpleGenerate.finalizedBy project.tasks.getByName(sourceSet.compileJavaTaskName)
             // overwrite the existing Java srcDirs. We want Gradle to only look at the folder that contains the output of the compileUmple task            
             sourceSet.java.srcDirs = [out.outputDir.toString()]        
         }
