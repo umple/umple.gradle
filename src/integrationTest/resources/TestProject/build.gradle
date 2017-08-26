@@ -20,12 +20,7 @@ apply plugin: 'java'
 subprojects {
   apply plugin: "umple.gradle.plugin"
   apply plugin: "java"
-
-// TODO this should not be neccesary. Find out why compileUmple is returning "UP-TO-DATE" when the output files have been deleted. 
-compileUmple {
-  outputs.upToDateWhen { false }
-}
-
+  
   // Attach the plugin properties to the generatedSource source set
   sourceSets {
     main {

@@ -67,6 +67,7 @@ testSets {
 
 //  Ensure that the outputs of the integration task are never "up-to-date" so that
 //  the integration test task runs fully every time we invoke it.
+// TODO Remove this, replace with incremental build logic
 project.integrationTest {
     outputs.upToDateWhen { false }
 }

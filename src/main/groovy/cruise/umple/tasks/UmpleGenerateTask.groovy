@@ -4,9 +4,7 @@ import cruise.umple.UmpleConsoleConfig
 import cruise.umple.UmpleConsoleMain
 import cruise.umple.UmpleLanguage
 import cruise.umple.internal.tasks.DefaultUmpleOptions
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.SourceTask
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 import org.gradle.api.tasks.incremental.IncrementalTaskInputs
 
 import static com.google.common.base.Preconditions.checkNotNull
@@ -14,10 +12,32 @@ import static com.google.common.base.Preconditions.checkNotNull
  * Created by kevin on 15/03/2017.
  */
 class UmpleGenerateTask extends SourceTask {
+    @Input
     private UmpleOptions compileConfig //this contains the DefaultUmpleOption we create within the apply method in UmpleGradlePlugin
+    @OutputFiles
+    private List<File> outputDirs
 
     UmpleGenerateTask() {
-        compileConfig = (DefaultUmpleOptions)(project.extensions.getByName(UmpleOptions.NAME))
+        this.compileConfig = (DefaultUmpleOptions)(project.extensions.getByName(UmpleOptions.NAME))
+        setOutputDirs(this.compileConfig)
+    }
+
+    @OutputFiles
+    void setOutputDirs(UmpleOptions newOpts) {
+        this.outputDirs = new ArrayList<File>()
+
+        UmpleOptions opts = newOpts
+        //println(opts)
+
+        // The user specifies paths relative to the main project directory, but
+        // the umple compiler requires paths relative to CWD /or/ absolute paths, we use absolutes
+        final projectPath = project.projectDir.toPath()
+        for (UmpleLanguage language: opts.language) {
+            // The output path is relative to the project, though.
+                    
+            outputDirs.add(projectPath.resolve(opts.resolveOutputDir(language).toPath()).toString())
+            //println("The output path we use: " + consoleConfig.path.get())
+        }
     }
 
     // updates the umple generate task's configuration. If any configuration values have been specified by the user, we use those. Otherwise we use the
