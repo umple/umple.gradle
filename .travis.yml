@@ -3,9 +3,16 @@ language: groovy
 jdk:
   - oraclejdk8
 
+os:
+  - linux
+  - osx
+
 before_install:
-  # Windows development makes it hard to keep this in git.
-  - chmod +x ./gradlew
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+      brew update ;
+      brew outdated wget || brew upgrade wget ;
+      brew install groovy ;
+    fi
   # Get the latest umple.jar
   - wget 'http://cruise.eecs.uottawa.ca/umpleonline/scripts/umple.jar' -O libs/umple-latest.jar
 
