@@ -1,9 +1,30 @@
-script:
-    - wget 'http://cruise.eecs.uottawa.ca/umpleonline/scripts/umple.jar' -O libs/umple-latest.jar
-    - ./gradlew build
-  
-matrix:
-    include:
-        - os: linux
-          jdk: oraclejdk8
-        - os: osx
+language: groovy
+
+jdk:
+  - oraclejdk8
+
+before_install:
+  # Windows development makes it hard to keep this in git.
+  - chmod +x ./gradlew
+  # Get the latest umple.jar
+  - wget 'http://cruise.eecs.uottawa.ca/umpleonline/scripts/umple.jar' -O libs/umple-latest.jar
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.m2
+
+# TODO Once this is published in the gradle portal, we can use this
+# deploy:
+#   provider: script
+#   # No need to rebuild all archives, let it do its thing.
+#   skip_cleanup: true
+#   script: ./gradlew publishPlugins
+#   on:
+#     tags: true
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
